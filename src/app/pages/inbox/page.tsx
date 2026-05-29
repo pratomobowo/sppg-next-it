@@ -20,6 +20,7 @@ import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 
 import { EmailDetail, EmailListItem } from './components'
+import { ComposePanel, type ComposeMode } from './compose-panel'
 import { type Email, initialEmails } from './data'
 
 const folders: Array<{ id: Email['folder']; label: string; icon: typeof InboxIcon }> = [
@@ -35,6 +36,8 @@ export default function InboxPage() {
   const [folder, setFolder] = useState<Email['folder']>('inbox')
   const [search, setSearch] = useState('')
   const [selectedId, setSelectedId] = useState<string | null>(initialEmails[0]?.id ?? null)
+  const [composeMode, setComposeMode] = useState<ComposeMode | null>(null)
+  const [composeSource, setComposeSource] = useState<Email | null>(null)
 
   const filtered = useMemo(() => {
     return emails
@@ -86,6 +89,11 @@ export default function InboxPage() {
     toast.success('Moved to trash')
   }
 
+  const openCompose = (mode: ComposeMode, src: Email | null = null) => {
+    setComposeSource(src)
+    setComposeMode(mode)
+  }
+
   return (
     <div className='space-y-4'>
       <div className='flex flex-wrap items-center justify-between gap-3'>
@@ -93,13 +101,13 @@ export default function InboxPage() {
           <h1 className='text-lg font-semibold tracking-tight'>Inbox</h1>
           <p className='text-muted-foreground text-xs'>Manage your emails and conversations.</p>
         </div>
-        <Button size='sm' className='h-8'>
+        <Button size='sm' className='h-8' onClick={() => openCompose('new')}>
           <PencilIcon className='size-3.5' /> Compose
         </Button>
       </div>
 
       <Card className='gap-0 overflow-hidden p-0'>
-        <div className='grid h-[calc(100vh-13rem)] min-h-96 grid-cols-1 md:grid-cols-[160px_320px_1fr]'>
+        <div className='grid h-[calc(100svh-13rem)] min-h-96 grid-cols-1 md:grid-cols-[160px_320px_1fr]'>
           <aside className='hidden border-r p-2 md:block'>
             <nav className='space-y-0.5'>
               {folders.map((f) => {
@@ -151,7 +159,7 @@ export default function InboxPage() {
             </div>
           </aside>
 
-          <div className='flex h-full flex-col border-r'>
+          <div className={cn('flex h-full min-h-0 flex-col border-r', selectedId && 'max-md:hidden')}>
             <div className='border-b p-2'>
               <div className='relative'>
                 <SearchIcon className='text-muted-foreground absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2' />
@@ -163,7 +171,7 @@ export default function InboxPage() {
                 />
               </div>
             </div>
-            <div className='flex-1 overflow-y-auto'>
+            <div className='min-h-0 flex-1 overflow-y-auto'>
               {filtered.length === 0 ? (
                 <div className='text-muted-foreground flex flex-col items-center gap-2 p-8 text-center text-xs'>
                   <ArchiveIcon className='size-6 opacity-40' />
@@ -186,12 +194,25 @@ export default function InboxPage() {
             </div>
           </div>
 
-          <EmailDetail
-            email={selected}
-            onArchive={() => selected && archive(selected.id)}
-            onDelete={() => selected && remove(selected.id)}
-            onToggleStar={() => selected && toggleStar(selected.id)}
-          />
+          <div className={cn('h-full min-h-0', !selectedId && !composeMode && 'max-md:hidden')}>
+            {composeMode ? (
+              <ComposePanel
+                mode={composeMode}
+                source={composeSource}
+                onClose={() => setComposeMode(null)}
+              />
+            ) : (
+              <EmailDetail
+                email={selected}
+                onBack={() => setSelectedId(null)}
+                onArchive={() => selected && archive(selected.id)}
+                onDelete={() => selected && remove(selected.id)}
+                onToggleStar={() => selected && toggleStar(selected.id)}
+                onReply={() => selected && openCompose('reply', selected)}
+                onForward={() => selected && openCompose('forward', selected)}
+              />
+            )}
+          </div>
         </div>
       </Card>
     </div>

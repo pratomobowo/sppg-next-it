@@ -202,6 +202,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+  /* Thin custom scrollbar rules moved OUT of @layer base below for max priority. */
   body {
     @apply bg-background text-foreground;
   }
@@ -231,4 +232,55 @@
   [data-slot="pagination-link"]:not([aria-disabled="true"]) {
     cursor: pointer;
   }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Custom thin scrollbar — kept UNLAYERED so it always beats
+   @layer base (Tailwind's unlayered styles win over layered ones).
+   Hidden by default, revealed on hover/focus of the scroll area,
+   no arrow steppers.
+   ────────────────────────────────────────────────────────────── */
+/* Firefox ONLY (Chromium/Brave support the ::-webkit-scrollbar selector,
+   so this block is scoped away from them to avoid the conflict where
+   setting scrollbar-width makes Chromium ignore ::-webkit-scrollbar rules). */
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-button,
+*::-webkit-scrollbar-button:start,
+*::-webkit-scrollbar-button:end,
+*::-webkit-scrollbar-button:vertical:start,
+*::-webkit-scrollbar-button:vertical:end,
+*::-webkit-scrollbar-button:horizontal:start,
+*::-webkit-scrollbar-button:horizontal:end,
+*::-webkit-scrollbar-button:single-button,
+*::-webkit-scrollbar-button:double-button {
+  display: none; /* remove up/down/left/right arrow steppers */
+  width: 0;
+  height: 0;
+  background: transparent;
+}
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+/* Always visible but subtle. We do NOT toggle visibility via ancestor :hover
+   because Chromium does not reliably repaint the scrollbar on container hover
+   changes — that caused the thumb to only appear when hovering the bar itself
+   and to get stuck visible after the cursor left. */
+*::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--muted-foreground); /* darker when hovering the bar directly */
 }

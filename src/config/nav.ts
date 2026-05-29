@@ -22,6 +22,7 @@ import {
   RocketIcon,
   SettingsIcon,
   ShapesIcon,
+  ShieldCheckIcon,
   TableIcon,
   TypeIcon,
   UserIcon,
@@ -43,6 +44,11 @@ export const dashboardNav: NavConfig = {
           title: 'SaaS Dashboard',
           url: '/dashboard-saas',
           icon: GaugeIcon
+        },
+        {
+          title: 'Analytics',
+          url: '/analytics',
+          icon: ChartPieIcon
         }
       ]
     },
@@ -80,6 +86,7 @@ export const dashboardNav: NavConfig = {
         { title: 'Activity', url: '/pages/activity', icon: ActivityIcon },
         { title: 'Kanban', url: '/pages/kanban', icon: KanbanSquareIcon },
         { title: 'Team', url: '/pages/team', icon: UsersIcon },
+        { title: 'Users & Roles', url: '/pages/users-roles', icon: ShieldCheckIcon },
         { title: 'Invoice', url: '/pages/invoice', icon: FileTextIcon },
         { title: 'Help Center', url: '/pages/help', icon: HelpCircleIcon },
         { title: 'Empty States', url: '/pages/empty-states', icon: InboxIcon },

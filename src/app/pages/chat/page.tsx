@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
+  ArrowLeftIcon,
   PaperclipIcon,
   PhoneIcon,
   SearchIcon,
@@ -9,11 +10,11 @@ import {
   SmileIcon,
   VideoIcon
 } from 'lucide-react'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 
 import { ConversationItem, MessageBubble, StatusAvatar } from './components'
@@ -98,7 +99,7 @@ export default function ChatPage() {
 
       <Card className='gap-0 overflow-hidden p-0'>
         <div className='grid h-[calc(100vh-13rem)] min-h-96 grid-cols-1 md:grid-cols-[300px_1fr]'>
-          <aside className='flex flex-col border-r'>
+          <aside className={cn('flex flex-col border-r', activeId && 'max-md:hidden')}>
             <div className='border-b p-2'>
               <div className='relative'>
                 <SearchIcon className='text-muted-foreground absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2' />
@@ -130,9 +131,18 @@ export default function ChatPage() {
           </aside>
 
           {activePartner ? (
-            <div className='flex h-full flex-col'>
+            <div className={cn('flex h-full min-h-0 flex-col', !activeId && 'max-md:hidden')}>
               <div className='flex items-center justify-between gap-2 border-b p-3'>
                 <div className='flex items-center gap-3'>
+                  <Button
+                    variant='ghost'
+                    size='icon'
+                    className='size-7 md:hidden'
+                    onClick={() => setActiveId('')}
+                    aria-label='Back to conversations'
+                  >
+                    <ArrowLeftIcon className='size-4' />
+                  </Button>
                   <StatusAvatar participant={activePartner} />
                   <div>
                     <p className='text-sm font-semibold leading-tight'>{activePartner.name}</p>
@@ -143,10 +153,22 @@ export default function ChatPage() {
                   </div>
                 </div>
                 <div className='flex items-center gap-1'>
-                  <Button variant='ghost' size='icon' className='size-8' aria-label='Voice call'>
+                  <Button
+                    variant='ghost'
+                    size='icon'
+                    className='size-8'
+                    aria-label='Voice call'
+                    onClick={() => toast.info('Voice call', { description: `Calling ${activePartner.name}...` })}
+                  >
                     <PhoneIcon className='size-4' />
                   </Button>
-                  <Button variant='ghost' size='icon' className='size-8' aria-label='Video call'>
+                  <Button
+                    variant='ghost'
+                    size='icon'
+                    className='size-8'
+                    aria-label='Video call'
+                    onClick={() => toast.info('Video call', { description: `Starting video with ${activePartner.name}...` })}
+                  >
                     <VideoIcon className='size-4' />
                   </Button>
                 </div>

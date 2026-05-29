@@ -25,6 +25,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
 import { PageHeader } from '@/components/showcase'
 
+import { ApiKeysSettings } from './api-keys'
+import { IntegrationsSettings } from './integrations'
+
 const profileSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
@@ -77,6 +80,8 @@ export default function SettingsPage() {
           <TabsTrigger value='profile'>Profile</TabsTrigger>
           <TabsTrigger value='notifications'>Notifications</TabsTrigger>
           <TabsTrigger value='security'>Security</TabsTrigger>
+          <TabsTrigger value='api-keys'>API Keys</TabsTrigger>
+          <TabsTrigger value='integrations'>Integrations</TabsTrigger>
         </TabsList>
 
         <TabsContent value='profile'>
@@ -89,6 +94,14 @@ export default function SettingsPage() {
 
         <TabsContent value='security'>
           <PasswordForm />
+        </TabsContent>
+
+        <TabsContent value='api-keys'>
+          <ApiKeysSettings />
+        </TabsContent>
+
+        <TabsContent value='integrations'>
+          <IntegrationsSettings />
         </TabsContent>
       </Tabs>
     </div>

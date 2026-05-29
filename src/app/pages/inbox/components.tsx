@@ -1,6 +1,7 @@
 'use client'
 
-import { ArchiveIcon, StarIcon, Trash2Icon } from 'lucide-react'
+import { ArchiveIcon, ArrowLeftIcon, StarIcon, Trash2Icon } from 'lucide-react'
+import { toast } from 'sonner'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -115,9 +116,12 @@ type EmailDetailProps = {
   onArchive: () => void
   onDelete: () => void
   onToggleStar: () => void
+  onBack?: () => void
+  onReply?: () => void
+  onForward?: () => void
 }
 
-export function EmailDetail({ email, onArchive, onDelete, onToggleStar }: EmailDetailProps) {
+export function EmailDetail({ email, onArchive, onDelete, onToggleStar, onBack, onReply, onForward }: EmailDetailProps) {
   if (!email) {
     return (
       <div className='text-muted-foreground flex h-full flex-col items-center justify-center gap-2 p-8 text-center text-sm'>
@@ -133,6 +137,11 @@ export function EmailDetail({ email, onArchive, onDelete, onToggleStar }: EmailD
     <div className='flex h-full flex-col'>
       <div className='flex items-center justify-between gap-2 border-b p-3'>
         <div className='flex items-center gap-1'>
+          {onBack ? (
+            <Button variant='ghost' size='icon' className='size-7 md:hidden' onClick={onBack} aria-label='Back'>
+              <ArrowLeftIcon className='size-4' />
+            </Button>
+          ) : null}
           <Button variant='ghost' size='icon' className='size-7' onClick={onArchive} aria-label='Archive'>
             <ArchiveIcon className='size-3.5' />
           </Button>
@@ -196,10 +205,10 @@ export function EmailDetail({ email, onArchive, onDelete, onToggleStar }: EmailD
 
       <div className='border-t p-3'>
         <div className='flex gap-2'>
-          <Button size='sm' className='flex-1'>
+          <Button size='sm' className='flex-1' onClick={onReply}>
             Reply
           </Button>
-          <Button variant='outline' size='sm' className='flex-1'>
+          <Button variant='outline' size='sm' className='flex-1' onClick={onForward}>
             Forward
           </Button>
         </div>

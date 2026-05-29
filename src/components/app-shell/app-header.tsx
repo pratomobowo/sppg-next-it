@@ -12,6 +12,7 @@ import { SidebarTrigger } from '@/components/ui/sidebar'
 import LanguageDropdown from '@/components/shadcn-studio/blocks/dropdown-language'
 import ProfileDropdown from '@/components/shadcn-studio/blocks/dropdown-profile'
 import { CommandPalette } from '@/components/command-palette'
+import { KeyboardShortcuts } from '@/components/keyboard-shortcuts'
 import { NotificationPanel } from '@/components/notification-panel'
 import { ThemeCustomizer } from '@/components/theme-customizer'
 import { ThemeToggle } from '@/components/theme-toggle'
@@ -36,6 +37,7 @@ export function AppHeader({ children, actions }: AppHeaderProps) {
         {actions ?? (
           <>
             <CommandPalette config={dashboardNav} />
+            <KeyboardShortcuts />
             <NotificationPanel />
             <ThemeToggle />
             <ThemeCustomizer />

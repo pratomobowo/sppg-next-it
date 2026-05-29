@@ -12,8 +12,11 @@ export type Email = {
   hasAttachment?: boolean
 }
 
+// Fixed base date keeps timestamps deterministic across server/client renders
+// (using new Date() here caused hydration mismatches as time advanced).
+const BASE = new Date('2025-05-29T12:00:00.000Z')
 const ago = (hours: number) => {
-  const d = new Date()
+  const d = new Date(BASE)
   d.setHours(d.getHours() - hours)
   return d.toISOString()
 }
