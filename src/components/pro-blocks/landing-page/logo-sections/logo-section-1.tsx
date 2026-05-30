@@ -59,13 +59,13 @@ export function LogoSection1() {
       <div className="section-padding-y container-padding-x mx-auto max-w-7xl border-x">
         <div className="flex flex-col items-center gap-12 md:gap-16">
           <div className="section-title-gap-lg flex max-w-xl flex-col items-center text-center">
-            <Tagline>Logo section</Tagline>
+            <Tagline>Trusted by teams</Tagline>
             <h2 className="heading-lg text-foreground">
-              Customer logos that build trust
+              Powering dashboards for growing teams
             </h2>
             <p className="text-muted-foreground text-lg/8 text-pretty">
-              Add logos of notable companies using your product. Include 4-6
-              recognizable brands in grayscale to maintain visual consistency.
+              From early-stage startups to established agencies, teams rely on
+              Moccilabs to ship internal tools and customer-facing backends faster.
             </p>
           </div>
 

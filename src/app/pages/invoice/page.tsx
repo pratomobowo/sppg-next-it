@@ -59,7 +59,7 @@ export default function InvoicePage() {
               </Badge>
             </div>
             <div className='text-right text-sm'>
-              <p className='font-semibold'>Mocci Studio</p>
+              <p className='font-semibold'>Moccilabs Studio</p>
               <p className='text-muted-foreground text-xs'>123 Market Street</p>
               <p className='text-muted-foreground text-xs'>San Francisco, CA 94102</p>
               <p className='text-muted-foreground text-xs'>billing@mocci.dev</p>

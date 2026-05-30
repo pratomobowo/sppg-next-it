@@ -165,7 +165,7 @@ export default function OnboardingPage() {
   return (
     <div className='mx-auto max-w-2xl space-y-6'>
       <div className='space-y-1 text-center'>
-        <h1 className='text-xl font-semibold tracking-tight'>Welcome to Mocci</h1>
+        <h1 className='text-xl font-semibold tracking-tight'>Welcome to Moccilabs</h1>
         <p className='text-muted-foreground text-sm'>Let&apos;s set up your workspace in a few quick steps.</p>
       </div>
 

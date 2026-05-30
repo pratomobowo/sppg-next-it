@@ -14,15 +14,15 @@ export function TestimonialsSection1() {
           id="testimonial-title"
           className="text-foreground text-center text-lg leading-7 font-medium text-pretty md:text-xl"
         >
-          &quot;Shadcn UI Kit for Figma has completely transformed our design
-          process. It&apos;s incredibly intuitive and saves us so much time. The
-          components are beautifully crafted and customizable.&quot;
+          &quot;Moccilabs completely transformed how we ship internal tools.
+          The dashboards and components are production-ready out of the box, so
+          we launched our admin panel in days instead of months.&quot;
         </blockquote>
 
         <div className="flex flex-col items-center gap-4">
           <Avatar className="h-12 w-12 rounded-xl md:h-14 md:w-14">
             <AvatarImage
-              src="https://github.com/shadcn.png"
+              src="https://api.dicebear.com/7.x/notionists/svg?seed=Lando Norris"
               alt="Lando Norris"
             />
           </Avatar>

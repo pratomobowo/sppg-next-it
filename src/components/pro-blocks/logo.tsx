@@ -10,7 +10,7 @@ export const Logo: React.FC<LogoProps> = ({ className = "" }) => {
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       role="img"
-      aria-label="Mocci"
+      aria-label="Moccilabs"
     >
       <path
         fill="currentColor"

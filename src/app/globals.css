@@ -5,6 +5,24 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@keyframes showcase-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes showcase-slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);

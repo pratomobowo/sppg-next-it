@@ -14,14 +14,14 @@ export function CtaSection1() {
         <div className="mx-auto flex max-w-xl flex-col items-center gap-8 md:gap-10">
           <div className="section-title-gap-lg mx-auto flex max-w-xl flex-col items-center text-center">
             <Tagline className="text-primary-foreground/80">
-              CTA Section
+              Get started
             </Tagline>
             <h2 id="cta-heading" className="heading-lg text-primary-foreground">
-              Action-driving headline that creates urgency
+              Start building your dashboard today
             </h2>
             <p className="text-primary-foreground/80 text-lg/8 text-pretty">
-              Add one or two compelling sentences that reinforce your main value
-              proposition and overcome final objections.
+              Open the dashboard and customize the components, theme, and layout
+              to match your product. No setup, no boilerplate to fight.
             </p>
           </div>
 

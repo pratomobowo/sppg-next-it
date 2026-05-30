@@ -9,23 +9,23 @@ export function BentoGrid1() {
     <section className="bg-muted">
       <div className="section-padding-y container-padding-x mx-auto flex max-w-7xl flex-col gap-10 border-x md:gap-12">
         <div className="section-title-gap-lg mx-auto flex max-w-xl flex-col items-center text-center">
-          <Tagline>Bento Grid Section</Tagline>
+          <Tagline>What&apos;s inside</Tagline>
           <h2 className="heading-lg">
-            Feature-rich layout that captures attention
+            Everything your dashboard needs, out of the box
           </h2>
           <p className="text-muted-foreground text-lg/8 text-pretty">
-            Add a concise value statement that highlights your product&apos;s key
-            features and benefits in a visually dynamic grid.
+            Charts, data tables, theming, and ready-made layouts that work
+            together so you spend time on your product, not on scaffolding.
           </p>
         </div>
 
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
           <Card className="rounded-xl shadow-xs lg:row-span-2">
             <CardHeader>
-              <h3 className="heading-sm">Feature title</h3>
+              <h3 className="heading-sm">Ready-made dashboards</h3>
               <p className="text-muted-foreground">
-                Shortly describe how this feature solves a specific user
-                problem.
+                SaaS, analytics, and app-shell layouts with sidebar, command
+                palette, and notifications already wired up.
               </p>
             </CardHeader>
             <CardContent className="flex h-full flex-col">
@@ -40,10 +40,10 @@ export function BentoGrid1() {
           </Card>
           <Card className="rounded-xl shadow-xs">
             <CardHeader>
-              <h3 className="heading-sm">Feature title</h3>
+              <h3 className="heading-sm">Charts &amp; analytics</h3>
               <p className="text-muted-foreground">
-                Shortly describe how this feature solves a specific user
-                problem.
+                Area, bar, and pie charts that follow your theme tokens
+                automatically.
               </p>
             </CardHeader>
             <CardContent className="flex h-full flex-col">
@@ -58,10 +58,10 @@ export function BentoGrid1() {
           </Card>
           <Card className="rounded-xl shadow-xs lg:col-start-2">
             <CardHeader>
-              <h3 className="heading-sm">Feature title</h3>
+              <h3 className="heading-sm">Powerful data tables</h3>
               <p className="text-muted-foreground">
-                Shortly describe how this feature solves a specific user
-                problem.
+                Sort, filter, and reorder rows with drag-and-drop, ready for
+                your own data.
               </p>
             </CardHeader>
             <CardContent className="flex h-full flex-col">
@@ -76,10 +76,10 @@ export function BentoGrid1() {
           </Card>
           <Card className="rounded-xl shadow-xs lg:col-start-3 lg:row-span-2 lg:row-start-1">
             <CardHeader>
-              <h3 className="heading-sm">Feature title</h3>
+              <h3 className="heading-sm">Theming you control</h3>
               <p className="text-muted-foreground">
-                Shortly describe how this feature solves a specific user
-                problem.
+                Switch color presets and radius on the fly, with full light and
+                dark mode support.
               </p>
             </CardHeader>
             <CardContent className="flex h-full flex-col">
