@@ -28,6 +28,7 @@ import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } f
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
+import { avatarSrc } from '@/lib/assets'
 
 const kpis = [
   {
@@ -309,7 +310,7 @@ export default function DashboardSaas() {
                 <li key={user.email} className='flex items-center gap-3 py-2.5 first:pt-0 last:pb-0'>
                   <Avatar className='size-8'>
                     <AvatarImage
-                      src={`https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-${user.avatar}.png`}
+                      src={avatarSrc(user.avatar)}
                       alt={user.name}
                     />
                     <AvatarFallback className='text-[10px]'>{user.fallback}</AvatarFallback>

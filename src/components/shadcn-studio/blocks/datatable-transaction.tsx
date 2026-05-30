@@ -3,6 +3,8 @@
 import { useState } from 'react'
 
 import type { ColumnDef, PaginationState } from '@tanstack/react-table'
+
+import { images } from '@/lib/assets'
 import {
   flexRender,
   getCoreRowModel,
@@ -83,8 +85,8 @@ export const columns: ColumnDef<Item>[] = [
       <img
         src={
           row.getValue('paidBy') === 'mastercard'
-            ? 'https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-1.png'
-            : 'https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-2.png'
+            ? images.payment1
+            : images.payment2
         }
         alt='Payment platform'
         className='w-10.5'

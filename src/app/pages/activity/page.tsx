@@ -49,7 +49,7 @@ const typeConfig: Record<ActivityType, { icon: typeof LogInIcon; color: string }
   delete: { icon: TrashIcon, color: 'bg-rose-500/10 text-rose-600 dark:text-rose-400' }
 }
 
-const avatar = (n: number) => `https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-${n}.png`
+import { avatarSrc as avatar } from '@/lib/assets'
 
 const activities: Activity[] = [
   { id: 'a1', type: 'deploy', actor: { name: 'Cameron Williamson', avatar: avatar(1), fallback: 'CW' }, action: 'merged pull request', target: '#142 datatable refactor', timestamp: '10:42 AM', date: 'Today' },

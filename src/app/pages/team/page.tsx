@@ -17,6 +17,7 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { PageHeader } from '@/components/showcase'
 import { cn } from '@/lib/utils'
+import { avatarSrc } from '@/lib/assets'
 
 type Member = {
   id: string
@@ -31,14 +32,14 @@ type Member = {
 }
 
 const members: Member[] = [
-  { id: 'm1', name: 'Jane Cooper', role: 'Senior Designer', department: 'Design', email: 'jane@example.com', avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-1.png', fallback: 'JC', status: 'online', projects: 12 },
-  { id: 'm2', name: 'Wade Warren', role: 'Engineering Lead', department: 'Engineering', email: 'wade@example.com', avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-2.png', fallback: 'WW', status: 'online', projects: 18 },
-  { id: 'm3', name: 'Esther Howard', role: 'Product Manager', department: 'Operations', email: 'esther@example.com', avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-3.png', fallback: 'EH', status: 'away', projects: 7 },
-  { id: 'm4', name: 'Cameron Williamson', role: 'Frontend Engineer', department: 'Engineering', email: 'cameron@example.com', avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-4.png', fallback: 'CW', status: 'offline', projects: 9 },
-  { id: 'm5', name: 'Brooklyn Simmons', role: 'Marketing Lead', department: 'Marketing', email: 'brooklyn@example.com', avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-5.png', fallback: 'BS', status: 'online', projects: 5 },
-  { id: 'm6', name: 'Leslie Alexander', role: 'Account Executive', department: 'Sales', email: 'leslie@example.com', avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-6.png', fallback: 'LA', status: 'offline', projects: 14 },
-  { id: 'm7', name: 'Jenny Wilson', role: 'UX Researcher', department: 'Design', email: 'jenny@example.com', avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-7.png', fallback: 'JW', status: 'away', projects: 6 },
-  { id: 'm8', name: 'Robert Fox', role: 'Backend Engineer', department: 'Engineering', email: 'robert@example.com', avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-8.png', fallback: 'RF', status: 'online', projects: 11 }
+  { id: 'm1', name: 'Jane Cooper', role: 'Senior Designer', department: 'Design', email: 'jane@example.com', avatar: avatarSrc(1), fallback: 'JC', status: 'online', projects: 12 },
+  { id: 'm2', name: 'Wade Warren', role: 'Engineering Lead', department: 'Engineering', email: 'wade@example.com', avatar: avatarSrc(2), fallback: 'WW', status: 'online', projects: 18 },
+  { id: 'm3', name: 'Esther Howard', role: 'Product Manager', department: 'Operations', email: 'esther@example.com', avatar: avatarSrc(3), fallback: 'EH', status: 'away', projects: 7 },
+  { id: 'm4', name: 'Cameron Williamson', role: 'Frontend Engineer', department: 'Engineering', email: 'cameron@example.com', avatar: avatarSrc(4), fallback: 'CW', status: 'offline', projects: 9 },
+  { id: 'm5', name: 'Brooklyn Simmons', role: 'Marketing Lead', department: 'Marketing', email: 'brooklyn@example.com', avatar: avatarSrc(5), fallback: 'BS', status: 'online', projects: 5 },
+  { id: 'm6', name: 'Leslie Alexander', role: 'Account Executive', department: 'Sales', email: 'leslie@example.com', avatar: avatarSrc(6), fallback: 'LA', status: 'offline', projects: 14 },
+  { id: 'm7', name: 'Jenny Wilson', role: 'UX Researcher', department: 'Design', email: 'jenny@example.com', avatar: avatarSrc(7), fallback: 'JW', status: 'away', projects: 6 },
+  { id: 'm8', name: 'Robert Fox', role: 'Backend Engineer', department: 'Engineering', email: 'robert@example.com', avatar: avatarSrc(8), fallback: 'RF', status: 'online', projects: 11 }
 ]
 
 const departmentStyle: Record<Member['department'], string> = {

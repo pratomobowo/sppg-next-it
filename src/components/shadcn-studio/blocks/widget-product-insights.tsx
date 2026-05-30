@@ -2,6 +2,8 @@
 
 import { Bar, BarChart } from 'recharts'
 
+import { images } from '@/lib/assets'
+
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { type ChartConfig, ChartContainer } from '@/components/ui/chart'
 import { Separator } from '@/components/ui/separator'
@@ -45,7 +47,7 @@ const ProductInsightsCard = ({ className }: { className?: string }) => {
           <span className='text-muted-foreground text-xs'>Published on 12 MAY 2025 - 6:10 PM</span>
         </div>
         <img
-          src='https://cdn.shadcnstudio.com/ss-assets/blocks/dashboard-application/widgets/image-7.png'
+          src={images.productInsights}
           alt='Product'
           className='w-20.5 rounded-md'
         />

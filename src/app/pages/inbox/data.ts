@@ -21,7 +21,7 @@ const ago = (hours: number) => {
   return d.toISOString()
 }
 
-const avatar = (n: number) => `https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-${n}.png`
+import { avatarSrc as avatar } from '@/lib/assets'
 
 export const initialEmails: Email[] = [
   {

@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { PageHeader } from '@/components/showcase'
+import { avatarSrc } from '@/lib/assets'
 
 const stats = [
   { label: 'Projects', value: '24' },
@@ -69,7 +70,7 @@ export default function ProfilePage() {
         <CardContent className='pb-6'>
           <div className='-mt-12 flex flex-wrap items-end justify-between gap-4'>
             <Avatar className='border-card size-24 border-4 shadow-sm'>
-              <AvatarImage src='https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-1.png' alt='Jane Doe' />
+              <AvatarImage src={avatarSrc(1)} alt='Jane Doe' />
               <AvatarFallback className='text-lg'>JD</AvatarFallback>
             </Avatar>
             <div className='flex gap-2'>

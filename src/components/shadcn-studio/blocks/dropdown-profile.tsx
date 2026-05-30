@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+
+import { currentUser } from '@/config/user'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,12 +26,12 @@ const ProfileDropdown = ({ trigger, defaultOpen, align = 'end' }: Props) => {
       <DropdownMenuContent className='w-56' align={align || 'end'}>
         <DropdownMenuLabel className='flex items-center gap-2 font-normal'>
           <Avatar className='size-8'>
-            <AvatarImage src='https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-1.png' alt='John Doe' />
-            <AvatarFallback>JD</AvatarFallback>
+            <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
+            <AvatarFallback>{currentUser.initials}</AvatarFallback>
           </Avatar>
           <div className='flex flex-1 flex-col items-start overflow-hidden'>
-            <span className='text-sm font-medium'>John Doe</span>
-            <span className='text-muted-foreground truncate text-xs'>john.doe@example.com</span>
+            <span className='text-sm font-medium'>{currentUser.name}</span>
+            <span className='text-muted-foreground truncate text-xs'>{currentUser.email}</span>
           </div>
         </DropdownMenuLabel>
 

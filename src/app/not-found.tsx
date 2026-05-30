@@ -12,7 +12,7 @@ export default function NotFound() {
       </p>
       <div className='mt-2 flex gap-3'>
         <Button asChild>
-          <Link href='/dashboard-shell-01'>Back to dashboard</Link>
+          <Link href='/dashboard'>Back to dashboard</Link>
         </Button>
         <Button variant='outline' asChild>
           <Link href='/'>Go home</Link>

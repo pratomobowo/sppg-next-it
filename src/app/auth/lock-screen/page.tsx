@@ -27,7 +27,7 @@ export default function LockScreenPage() {
     await new Promise((resolve) => setTimeout(resolve, 800))
     setSubmitting(false)
     toast.success('Unlocked', { description: 'Welcome back' })
-    router.push('/dashboard-shell-01')
+    router.push('/dashboard')
   }
 
   return (

@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Mocci Admin",
-    template: "%s · Mocci Admin",
+    default: "Moccilabs",
+    template: "%s · Moccilabs",
   },
   description:
     "A modern admin dashboard template built with Next.js, React, Tailwind CSS, and shadcn-style components.",

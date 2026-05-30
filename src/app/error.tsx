@@ -30,7 +30,7 @@ export default function Error({
       <div className='mt-2 flex gap-3'>
         <Button onClick={reset}>Try again</Button>
         <Button variant='outline' asChild>
-          <Link href='/dashboard-shell-01'>Back to dashboard</Link>
+          <Link href='/dashboard'>Back to dashboard</Link>
         </Button>
       </div>
     </div>

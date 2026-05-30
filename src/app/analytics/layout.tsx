@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react'
 
-import { AppHeader, AppShell, AppSidebar, WorkspaceSwitcher } from '@/components/app-shell'
+import { AppFooter, AppHeader, AppShell, AppSidebar, WorkspaceSwitcher } from '@/components/app-shell'
 import { AutoBreadcrumb } from '@/components/auto-breadcrumb'
 import { dashboardNav } from '@/config/nav'
 import { workspaces } from '@/config/workspaces'
@@ -18,6 +18,7 @@ export default function AnalyticsLayout({ children }: { children: ReactNode }) {
           <AutoBreadcrumb config={dashboardNav} />
         </AppHeader>
       }
+      footer={<AppFooter />}
     >
       <div className='space-y-6'>{children}</div>
     </AppShell>

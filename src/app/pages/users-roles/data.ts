@@ -71,7 +71,7 @@ export const allPermissions: Permission[] = permissionGroups.flatMap((g) =>
   g.permissions.map((p) => p.id)
 )
 
-const avatar = (n: number) => `https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-${n}.png`
+import { avatarSrc as avatar } from '@/lib/assets'
 
 export const roles: Role[] = [
   {

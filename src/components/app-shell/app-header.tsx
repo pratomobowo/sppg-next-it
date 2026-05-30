@@ -12,6 +12,7 @@ import { SidebarTrigger } from '@/components/ui/sidebar'
 import LanguageDropdown from '@/components/shadcn-studio/blocks/dropdown-language'
 import ProfileDropdown from '@/components/shadcn-studio/blocks/dropdown-profile'
 import { CommandPalette } from '@/components/command-palette'
+import { avatarSrc } from '@/lib/assets'
 import { KeyboardShortcuts } from '@/components/keyboard-shortcuts'
 import { NotificationPanel } from '@/components/notification-panel'
 import { ThemeCustomizer } from '@/components/theme-customizer'
@@ -53,7 +54,7 @@ export function AppHeader({ children, actions }: AppHeaderProps) {
                 <Button variant='ghost' size='icon'>
                   <Avatar className='size-[inherit] rounded-[inherit]'>
                     <AvatarImage
-                      src='https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-1.png'
+                      src={avatarSrc(1)}
                       className='rounded-[inherit]'
                     />
                     <AvatarFallback className='rounded-[inherit] text-xs'>JD</AvatarFallback>

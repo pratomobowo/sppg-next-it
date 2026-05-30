@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { PageHeader, Showcase, ShowcaseGrid } from '@/components/showcase'
+import { avatarSrc } from '@/lib/assets'
 
 export default function AvatarPage() {
   return (
@@ -8,15 +9,15 @@ export default function AvatarPage() {
       <ShowcaseGrid>
         <Showcase title='Sizes'>
           <Avatar size='sm'>
-            <AvatarImage src='https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-1.png' />
+            <AvatarImage src={avatarSrc(1)} />
             <AvatarFallback>SM</AvatarFallback>
           </Avatar>
           <Avatar>
-            <AvatarImage src='https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-2.png' />
+            <AvatarImage src={avatarSrc(2)} />
             <AvatarFallback>MD</AvatarFallback>
           </Avatar>
           <Avatar size='lg'>
-            <AvatarImage src='https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-3.png' />
+            <AvatarImage src={avatarSrc(3)} />
             <AvatarFallback>LG</AvatarFallback>
           </Avatar>
         </Showcase>

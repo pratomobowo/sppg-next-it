@@ -1,3 +1,5 @@
+import { avatarSrc } from '@/lib/assets'
+
 export type Priority = 'low' | 'medium' | 'high'
 
 export type Assignee = {
@@ -34,7 +36,7 @@ export const priorityStyles: Record<Priority, string> = {
 const avatar = (n: number, fallback: string): Assignee => ({
   name: fallback,
   fallback,
-  avatar: `https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-${n}.png`
+  avatar: avatarSrc(n)
 })
 
 export const initialColumns: Column[] = [

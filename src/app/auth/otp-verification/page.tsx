@@ -25,7 +25,7 @@ export default function OtpVerificationPage() {
     await new Promise((resolve) => setTimeout(resolve, 800))
     setSubmitting(false)
     toast.success('Verified', { description: 'Your identity has been confirmed' })
-    router.push('/dashboard-shell-01')
+    router.push('/dashboard')
   }
 
   const onResend = () => {

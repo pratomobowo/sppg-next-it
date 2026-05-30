@@ -1,29 +1,24 @@
 import {
-  ActivityIcon,
   AlertTriangleIcon,
   AppWindowIcon,
+  BellIcon,
   BoxIcon,
-  CalendarIcon,
-  ShoppingCartIcon,
   ChartNoAxesCombinedIcon,
   ChartPieIcon,
   ClipboardListIcon,
   CreditCardIcon,
+  WalletIcon,
   FileTextIcon,
-  FolderIcon,
   GaugeIcon,
   HelpCircleIcon,
   InboxIcon,
-  KanbanSquareIcon,
+  LayoutGridIcon,
   LockIcon,
-  MailIcon,
-  MessagesSquareIcon,
   NavigationIcon,
   PanelLeftIcon,
   RocketIcon,
-  SettingsIcon,
   ShapesIcon,
-  ShieldCheckIcon,
+  ShoppingCartIcon,
   TableIcon,
   TypeIcon,
   UserIcon,
@@ -38,7 +33,7 @@ export const dashboardNav: NavConfig = {
       items: [
         {
           title: 'Dashboard',
-          url: '/dashboard-shell-01',
+          url: '/dashboard',
           icon: ChartNoAxesCombinedIcon
         },
         {
@@ -95,23 +90,46 @@ export const dashboardNav: NavConfig = {
             { title: '500 Server Error', url: '/pages/500' }
           ]
         },
-        { title: 'Settings', url: '/pages/settings', icon: SettingsIcon },
-        { title: 'Profile', url: '/pages/profile', icon: UserIcon },
-        { title: 'Pricing', url: '/pages/pricing', icon: CreditCardIcon },
         { title: 'Onboarding', url: '/pages/onboarding', icon: RocketIcon },
-        { title: 'Form Examples', url: '/pages/form-examples', icon: ClipboardListIcon },
-        { title: 'Calendar', url: '/pages/calendar', icon: CalendarIcon },
-        { title: 'Inbox', url: '/pages/inbox', icon: MailIcon },
-        { title: 'Chat', url: '/pages/chat', icon: MessagesSquareIcon },
-        { title: 'Files', url: '/pages/files', icon: FolderIcon },
-        { title: 'Activity', url: '/pages/activity', icon: ActivityIcon },
-        { title: 'Kanban', url: '/pages/kanban', icon: KanbanSquareIcon },
-        { title: 'Team', url: '/pages/team', icon: UsersIcon },
-        { title: 'Users & Roles', url: '/pages/users-roles', icon: ShieldCheckIcon },
+        {
+          title: 'Apps',
+          url: '#',
+          icon: LayoutGridIcon,
+          items: [
+            { title: 'Calendar', url: '/pages/calendar' },
+            { title: 'Inbox', url: '/pages/inbox' },
+            { title: 'Chat', url: '/pages/chat' },
+            { title: 'Files', url: '/pages/files' },
+            { title: 'Kanban', url: '/pages/kanban' },
+            { title: 'Activity', url: '/pages/activity' }
+          ]
+        },
+        {
+          title: 'Account',
+          url: '#',
+          icon: UserIcon,
+          items: [
+            { title: 'Profile', url: '/pages/profile' },
+            { title: 'Settings', url: '/pages/settings' }
+          ]
+        },
+        {
+          title: 'Members',
+          url: '#',
+          icon: UsersIcon,
+          items: [
+            { title: 'Team', url: '/pages/team' },
+            { title: 'Users & Roles', url: '/pages/users-roles' }
+          ]
+        },
+        { title: 'Pricing', url: '/pages/pricing', icon: CreditCardIcon },
+        { title: 'Billing', url: '/pages/billing', icon: WalletIcon },
         { title: 'Invoice', url: '/pages/invoice', icon: FileTextIcon },
+        { title: 'Form Examples', url: '/pages/form-examples', icon: ClipboardListIcon },
+        { title: 'Data Table', url: '/pages/datatable', icon: TableIcon },
         { title: 'Help Center', url: '/pages/help', icon: HelpCircleIcon },
-        { title: 'Empty States', url: '/pages/empty-states', icon: InboxIcon },
-        { title: 'Data Table', url: '/pages/datatable', icon: TableIcon }
+        { title: 'Notifications', url: '/pages/notifications', icon: BellIcon },
+        { title: 'Empty States', url: '/pages/empty-states', icon: InboxIcon }
       ]
     },
     {
@@ -126,7 +144,9 @@ export const dashboardNav: NavConfig = {
             { title: 'Checkbox', url: '/components/checkbox' },
             { title: 'Combobox', url: '/components/combobox' },
             { title: 'Date Picker', url: '/components/date-picker' },
+            { title: 'Form', url: '/components/form' },
             { title: 'Input', url: '/components/input' },
+            { title: 'Input Group', url: '/components/input-group' },
             { title: 'Input OTP', url: '/components/input-otp' },
             { title: 'Label', url: '/components/label' },
             { title: 'Radio Group', url: '/components/radio-group' },
@@ -150,7 +170,9 @@ export const dashboardNav: NavConfig = {
             { title: 'Badge', url: '/components/badge' },
             { title: 'Card', url: '/components/card' },
             { title: 'Carousel', url: '/components/carousel' },
+            { title: 'Collapsible', url: '/components/collapsible' },
             { title: 'Empty', url: '/components/empty' },
+            { title: 'Item', url: '/components/item' },
             { title: 'Kbd', url: '/components/kbd' },
             { title: 'Progress', url: '/components/progress' },
             { title: 'Separator', url: '/components/separator' },
@@ -177,6 +199,7 @@ export const dashboardNav: NavConfig = {
           icon: AppWindowIcon,
           items: [
             { title: 'Alert Dialog', url: '/components/alert-dialog' },
+            { title: 'Command', url: '/components/command' },
             { title: 'Context Menu', url: '/components/context-menu' },
             { title: 'Dialog', url: '/components/dialog' },
             { title: 'Drawer', url: '/components/drawer' },

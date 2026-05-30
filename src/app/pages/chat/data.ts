@@ -22,7 +22,7 @@ export type Conversation = {
   pinned?: boolean
 }
 
-const avatar = (n: number) => `https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-${n}.png`
+import { avatarSrc as avatar } from '@/lib/assets'
 
 const ago = (minutes: number) => {
   const d = new Date()

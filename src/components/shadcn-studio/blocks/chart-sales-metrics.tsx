@@ -2,6 +2,8 @@
 
 import { Bar, BarChart, Label, Pie, PieChart } from 'recharts'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+
+import { images } from '@/lib/assets'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { TrendingUpIcon, BadgePercentIcon, DollarSignIcon, ShoppingBagIcon, ChartNoAxesCombinedIcon, CirclePercentIcon } from 'lucide-react'
@@ -95,7 +97,7 @@ const SalesMetricsCard = ({ className }: { className?: string }) => {
             <span className='text-base font-semibold'>Sales metrics</span>
             <div className='flex items-center gap-3'>
               <img
-                src='https://cdn.shadcnstudio.com/ss-assets/logo/logo-square.png'
+                src={images.logoSquare}
                 className='size-10.5 rounded-lg'
                 alt='logo'
               />
