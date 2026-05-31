@@ -5,6 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { themePresets } from "@/config/theme-presets";
+import { AuthProvider } from "@/lib/auth";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,11 +19,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Moccilabs",
-    template: "%s · Moccilabs",
+    default: "SPPG MBG",
+    template: "%s · SPPG MBG",
   },
   description:
-    "A modern admin dashboard template built with Next.js, React, Tailwind CSS, and shadcn-style components.",
+    "Sistem Monitoring & Procurement Dapur MBG — PT Niaga Expert Teknologi",
   manifest: "/site.webmanifest",
   icons: {
     icon: [
@@ -34,7 +35,7 @@ export const metadata: Metadata = {
     apple: { url: "/apple-touch-icon.png", sizes: "180x180" },
   },
   appleWebApp: {
-    title: "Moccilabs",
+    title: "SPPG MBG",
   },
 };
 
@@ -56,7 +57,7 @@ const presetMap = JSON.stringify(
 const initScript = `
 (function() {
   try {
-    var p = localStorage.getItem('theme-preset') || 'neutral';
+    var p = localStorage.getItem('theme-preset') || 'blue';
     var r = localStorage.getItem('theme-radius');
     var map = ${presetMap};
     var d = document.documentElement;
@@ -73,7 +74,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="id"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
@@ -85,7 +86,9 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col">
         <ThemeProvider>
-          {children}
+          <AuthProvider>
+            {children}
+          </AuthProvider>
           <Toaster />
         </ThemeProvider>
       </body>

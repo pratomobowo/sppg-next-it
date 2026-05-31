@@ -80,7 +80,7 @@ function PICDashboardSkeleton() {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export default function PICDashboard() {
+export default function PICDashboardPage() {
   const { currentUser } = useAuth()
 
   // ═══ Loading State ═══

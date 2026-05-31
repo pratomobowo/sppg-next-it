@@ -1,9 +1,9 @@
-import { BriefcaseIcon, RocketIcon, SparklesIcon } from 'lucide-react'
+import { Building2Icon } from 'lucide-react'
 
 import type { Workspace } from '@/components/app-shell/workspace-switcher'
 
 export const workspaces: Workspace[] = [
-  { id: 'mocci', name: 'Moccilabs', plan: 'Enterprise', logo: SparklesIcon },
-  { id: 'acme', name: 'Acme Inc.', plan: 'Pro', logo: RocketIcon },
-  { id: 'studio', name: 'Studio', plan: 'Free', logo: BriefcaseIcon }
+  { id: 'al-falah', name: 'Yayasan Al-Falah', plan: 'MBG Program', logo: Building2Icon },
+  { id: 'nurul-iman', name: 'Yayasan Nurul Iman', plan: 'MBG Program', logo: Building2Icon },
+  { id: 'baiturrahman', name: 'Yayasan Baiturrahman', plan: 'MBG Program', logo: Building2Icon }
 ]

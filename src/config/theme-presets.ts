@@ -19,16 +19,16 @@ export type ThemePreset = {
  */
 export const themePresets: ThemePreset[] = [
   {
-    name: 'neutral',
-    label: 'Neutral',
-    light: { primary: 'oklch(0.205 0 0)', primaryForeground: 'oklch(0.985 0 0)' },
-    dark: { primary: 'oklch(0.922 0 0)', primaryForeground: 'oklch(0.205 0 0)' }
-  },
-  {
     name: 'blue',
     label: 'Blue',
     light: { primary: 'oklch(0.546 0.215 262.881)', primaryForeground: 'oklch(0.985 0 0)' },
     dark: { primary: 'oklch(0.707 0.165 254.624)', primaryForeground: 'oklch(0.205 0 0)' }
+  },
+  {
+    name: 'neutral',
+    label: 'Neutral',
+    light: { primary: 'oklch(0.205 0 0)', primaryForeground: 'oklch(0.985 0 0)' },
+    dark: { primary: 'oklch(0.922 0 0)', primaryForeground: 'oklch(0.205 0 0)' }
   },
   {
     name: 'violet',
@@ -56,7 +56,7 @@ export const themePresets: ThemePreset[] = [
   }
 ]
 
-export const defaultPreset = 'neutral'
+export const defaultPreset = 'blue'
 export const defaultRadius = 0.625
 export const radiusOptions = [0, 0.3, 0.5, 0.625, 0.75, 1] as const
 

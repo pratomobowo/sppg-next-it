@@ -1,6 +1,7 @@
 'use client'
 
-import type { ReactNode } from 'react'
+import { useEffect, type ReactNode } from 'react'
+import { useRouter } from 'next/navigation'
 
 import {
   Breadcrumb,
@@ -8,31 +9,49 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator
+  BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 
-import { AppFooter, AppHeader, AppShell, AppSidebar, WorkspaceSwitcher } from '@/components/app-shell'
-import { dashboardNav } from '@/config/nav'
-import { workspaces } from '@/config/workspaces'
+import { AppFooter, AppHeader, AppShell, AppSidebar } from '@/components/app-shell'
+import { useAuth } from '@/lib/auth'
+import { getNavForRole } from '@/config/sppg-nav'
+
+const ROLE_REDIRECTS: Record<string, string> = {
+  'Super Administrator': '/admin/dashboard',
+  'BGN (Badan Gizi Nasional)': '/compliance-dashboard',
+  'Investor': '/investor-dashboard',
+}
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
+  const { currentUser } = useAuth()
+  const router = useRouter()
+  const navConfig = getNavForRole(currentUser?.role ?? null)
+
+  // ─── Role-based redirect ───
+  useEffect(() => {
+    if (currentUser?.role && ROLE_REDIRECTS[currentUser.role]) {
+      router.replace(ROLE_REDIRECTS[currentUser.role])
+    }
+  }, [currentUser, router])
+
+  // Don't render shell for roles that should be redirected
+  if (currentUser?.role && ROLE_REDIRECTS[currentUser.role]) {
+    return null
+  }
+
   return (
     <AppShell
-      sidebar={<AppSidebar config={dashboardNav} header={<WorkspaceSwitcher workspaces={workspaces} />} />}
+      sidebar={<AppSidebar config={navConfig} />}
       header={
         <AppHeader>
-          <Breadcrumb className='hidden sm:block'>
+          <Breadcrumb className="hidden sm:block">
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href='#'>Home</BreadcrumbLink>
+                <BreadcrumbLink href="/dashboard">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink href='#'>Dashboard</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>Free</BreadcrumbPage>
+                <BreadcrumbPage>Dashboard</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
