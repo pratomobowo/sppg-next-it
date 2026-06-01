@@ -1,7 +1,7 @@
 'use client'
 
 import { useParams, useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   LineChart,
   Line,
@@ -45,18 +45,25 @@ const MOCK_DAPUR: Record<
   'dapur-6': { name: 'Dapur Serpong', lokasi: 'Tangerang Selatan', compliance: 82 },
 }
 
-// 14-day mock data
-const MOCK_DETAIL_CHART = Array.from({ length: 14 }, (_, i) => ({
-  day: `H${i + 1}`,
-  kalori: 400 + Math.round(Math.random() * 80 + i * 3),
-  kaloriStd: 450,
-  karbohidrat: 50 + Math.round(Math.random() * 15 + i),
-  karbohidratStd: 60,
-  protein: 16 + Math.round(Math.random() * 10 + i * 0.5),
-  proteinStd: 22,
-  lemak: 12 + Math.round(Math.random() * 10 + i * 0.3),
-  lemakStd: 18,
-}))
+// 14-day mock data (deterministic to avoid hydration mismatch)
+const MOCK_DETAIL_CHART = Array.from({ length: 14 }, (_, i) => {
+  const pseudoRandom1 = (i * 17) % 80
+  const pseudoRandom2 = (i * 23) % 15
+  const pseudoRandom3 = (i * 7) % 10
+  const pseudoRandom4 = (i * 11) % 10
+
+  return {
+    day: `H${i + 1}`,
+    kalori: 400 + Math.round(pseudoRandom1 + i * 3),
+    kaloriStd: 450,
+    karbohidrat: 50 + Math.round(pseudoRandom2 + i),
+    karbohidratStd: 60,
+    protein: 16 + Math.round(pseudoRandom3 + i * 0.5),
+    proteinStd: 22,
+    lemak: 12 + Math.round(pseudoRandom4 + i * 0.3),
+    lemakStd: 18,
+  }
+})
 
 const MOCK_DAILY = [
   {
@@ -218,6 +225,11 @@ export default function DapurComplianceDetailPage() {
   }
 
   const [openDetail, setOpenDetail] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const computeAvg = (key: NK) => {
     const vals = MOCK_DETAIL_CHART.map((d) => d[key])
@@ -254,25 +266,27 @@ export default function DapurComplianceDetailPage() {
         </CardHeader>
         <CardContent>
           <div className="h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={MOCK_DETAIL_CHART}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="day" />
-                <YAxis />
-                <Tooltip />
-                {NUTRIENT_KEYS.map((key) => (
-                  <Line
-                    key={key}
-                    type="monotone"
-                    dataKey={key}
-                    stroke={NUTRIENT_META[key].color}
-                    strokeWidth={2}
-                    name={NUTRIENT_META[key].label}
-                    dot={{ r: 2 }}
-                  />
-                ))}
-              </LineChart>
-            </ResponsiveContainer>
+            {mounted && (
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={MOCK_DETAIL_CHART}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="day" />
+                  <YAxis />
+                  <Tooltip />
+                  {NUTRIENT_KEYS.map((key) => (
+                    <Line
+                      key={key}
+                      type="monotone"
+                      dataKey={key}
+                      stroke={NUTRIENT_META[key].color}
+                      strokeWidth={2}
+                      name={NUTRIENT_META[key].label}
+                      dot={{ r: 2 }}
+                    />
+                  ))}
+                </LineChart>
+              </ResponsiveContainer>
+            )}
           </div>
         </CardContent>
       </Card>

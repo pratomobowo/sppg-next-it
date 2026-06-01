@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   BarChart,
   Bar,
@@ -35,21 +35,26 @@ function formatRupiah(n: number): string {
 }
 
 // ---------------------------------------------------------------------------
-// Mock data
+// Mock data (Static values without Math.random to prevent hydration mismatch)
 // ---------------------------------------------------------------------------
 
-const BULAN = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun']
+const MOCK_KAS = [
+  { bulan: 'Jan', masuk: 195000000, keluar: 135000000 },
+  { bulan: 'Feb', masuk: 210000000, keluar: 145000000 },
+  { bulan: 'Mar', masuk: 185000000, keluar: 140000000 },
+  { bulan: 'Apr', masuk: 230000000, keluar: 160000000 },
+  { bulan: 'Mei', masuk: 205000000, keluar: 150000000 },
+  { bulan: 'Jun', masuk: 240000000, keluar: 165000000 },
+]
 
-const MOCK_KAS = BULAN.map((bln) => ({
-  bulan: bln,
-  masuk: 180000000 + Math.round(Math.random() * 60000000),
-  keluar: 130000000 + Math.round(Math.random() * 40000000),
-}))
-
-const MOCK_PORSI = BULAN.map((bln) => ({
-  bulan: bln,
-  porsi: 7500 + Math.round(Math.random() * 1500),
-}))
+const MOCK_PORSI = [
+  { bulan: 'Jan', porsi: 7800 },
+  { bulan: 'Feb', porsi: 8200 },
+  { bulan: 'Mar', porsi: 8000 },
+  { bulan: 'Apr', porsi: 8500 },
+  { bulan: 'Mei', porsi: 8300 },
+  { bulan: 'Jun', porsi: 8900 },
+]
 
 // ---------------------------------------------------------------------------
 // Page
@@ -57,6 +62,11 @@ const MOCK_PORSI = BULAN.map((bln) => ({
 
 export default function InvestorDashboardPage() {
   const [yayasan, setYayasan] = useState('semua')
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   return (
     <div className="space-y-6 p-6">
@@ -164,28 +174,30 @@ export default function InvestorDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={MOCK_KAS}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="bulan" />
-                  <YAxis tickFormatter={(v) => `${(v / 1_000_000).toFixed(0)}M`} />
-                  <Tooltip
-                    formatter={(value) => formatRupiah(Number(value))}
-                  />
-                  <Bar
-                    dataKey="masuk"
-                    fill="#0D904F"
-                    name="Dana Masuk"
-                    radius={[4, 4, 0, 0]}
-                  />
-                  <Bar
-                    dataKey="keluar"
-                    fill="#D93025"
-                    name="Dana Keluar"
-                    radius={[4, 4, 0, 0]}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
+              {mounted && (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={MOCK_KAS}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="bulan" />
+                    <YAxis tickFormatter={(v) => typeof v === 'number' ? `${(v / 1_000_000).toFixed(0)}M` : v} />
+                    <Tooltip
+                      formatter={(value) => formatRupiah(Number(value))}
+                    />
+                    <Bar
+                      dataKey="masuk"
+                      fill="#0D904F"
+                      name="Dana Masuk"
+                      radius={[4, 4, 0, 0]}
+                    />
+                    <Bar
+                      dataKey="keluar"
+                      fill="#D93025"
+                      name="Dana Keluar"
+                      radius={[4, 4, 0, 0]}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -197,24 +209,26 @@ export default function InvestorDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={MOCK_PORSI}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="bulan" />
-                  <YAxis />
-                  <Tooltip
-                    formatter={(value) => Number(value).toLocaleString('id-ID')}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="porsi"
-                    stroke="#1A73E8"
-                    strokeWidth={3}
-                    name="Porsi Tersalurkan"
-                    dot={{ r: 5 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+              {mounted && (
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={MOCK_PORSI}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="bulan" />
+                    <YAxis />
+                    <Tooltip
+                      formatter={(value) => Number(value).toLocaleString('id-ID')}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="porsi"
+                      stroke="#1A73E8"
+                      strokeWidth={3}
+                      name="Porsi Tersalurkan"
+                      dot={{ r: 5 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              )}
             </div>
           </CardContent>
         </Card>

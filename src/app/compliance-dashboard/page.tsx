@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import {
   LineChart,
@@ -31,17 +31,25 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 const DAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
 
-const MOCK_CHART = DAYS.map((day, i) => ({
-  day,
-  kalori: 420 + i * 3 + Math.round(Math.random() * 20 - 10),
-  kaloriStd: 450,
-  karbohidrat: 55 + i + Math.round(Math.random() * 4 - 2),
-  karbohidratStd: 60,
-  protein: 18 + Math.round(i * 1.5 + Math.random() * 3 - 1.5),
-  proteinStd: 22,
-  lemak: 14 + Math.round(i * 0.5 + Math.random() * 2 - 1),
-  lemakStd: 18,
-}))
+// Generate mock data deterministically to prevent hydration mismatch
+const MOCK_CHART = DAYS.map((day, i) => {
+  const pseudoRandom1 = (i * 7) % 20 - 10
+  const pseudoRandom2 = (i * 13) % 4 - 2
+  const pseudoRandom3 = ((i * 3) % 3) - 1.5
+  const pseudoRandom4 = ((i * 11) % 2) - 1
+
+  return {
+    day,
+    kalori: 420 + i * 3 + Math.round(pseudoRandom1),
+    kaloriStd: 450,
+    karbohidrat: 55 + i + Math.round(pseudoRandom2),
+    karbohidratStd: 60,
+    protein: 18 + Math.round(i * 1.5 + pseudoRandom3),
+    proteinStd: 22,
+    lemak: 14 + Math.round(i * 0.5 + pseudoRandom4),
+    lemakStd: 18,
+  }
+})
 
 const MOCK_TABLE = [
   { id: 'dapur-1', name: 'Dapur Ciputat', lokasi: 'Tangerang Selatan', compliance: 94 },
@@ -93,6 +101,11 @@ export default function ComplianceDashboardPage() {
   const [selectedNutrient, setSelectedNutrient] = useState<NutrientKey | 'all'>(
     'all'
   )
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   if (loading) {
     return (
@@ -228,72 +241,74 @@ export default function ComplianceDashboardPage() {
         </CardHeader>
         <CardContent>
           <div className="h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={MOCK_CHART}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="day" />
-                <YAxis />
-                <Tooltip />
+            {mounted && (
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={MOCK_CHART}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="day" />
+                  <YAxis />
+                  <Tooltip />
 
-                {selectedNutrient === 'all' ? (
-                  <>
-                    <Line
-                      type="monotone"
-                      dataKey="kalori"
-                      stroke={NUTRIENT_CONFIG.kalori.color}
-                      strokeWidth={2}
-                      name="Kalori"
-                      dot={{ r: 3 }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="karbohidrat"
-                      stroke={NUTRIENT_CONFIG.karbohidrat.color}
-                      strokeWidth={2}
-                      name="Karbohidrat"
-                      dot={{ r: 3 }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="protein"
-                      stroke={NUTRIENT_CONFIG.protein.color}
-                      strokeWidth={2}
-                      name="Protein"
-                      dot={{ r: 3 }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="lemak"
-                      stroke={NUTRIENT_CONFIG.lemak.color}
-                      strokeWidth={2}
-                      name="Lemak"
-                      dot={{ r: 3 }}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <Line
-                      type="monotone"
-                      dataKey={selectedNutrient}
-                      stroke={NUTRIENT_CONFIG[selectedNutrient].color}
-                      strokeWidth={2}
-                      name={NUTRIENT_CONFIG[selectedNutrient].label}
-                      dot={{ r: 4 }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey={NUTRIENT_CONFIG[selectedNutrient].std}
-                      stroke="#D93025"
-                      strokeWidth={2}
-                      strokeDasharray="5 5"
-                      name={`Standar BGN`}
-                      dot={false}
-                      opacity={0.5}
-                    />
-                  </>
-                )}
-              </LineChart>
-            </ResponsiveContainer>
+                  {selectedNutrient === 'all' ? (
+                    <>
+                      <Line
+                        type="monotone"
+                        dataKey="kalori"
+                        stroke={NUTRIENT_CONFIG.kalori.color}
+                        strokeWidth={2}
+                        name="Kalori"
+                        dot={{ r: 3 }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="karbohidrat"
+                        stroke={NUTRIENT_CONFIG.karbohidrat.color}
+                        strokeWidth={2}
+                        name="Karbohidrat"
+                        dot={{ r: 3 }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="protein"
+                        stroke={NUTRIENT_CONFIG.protein.color}
+                        strokeWidth={2}
+                        name="Protein"
+                        dot={{ r: 3 }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="lemak"
+                        stroke={NUTRIENT_CONFIG.lemak.color}
+                        strokeWidth={2}
+                        name="Lemak"
+                        dot={{ r: 3 }}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Line
+                        type="monotone"
+                        dataKey={selectedNutrient}
+                        stroke={NUTRIENT_CONFIG[selectedNutrient].color}
+                        strokeWidth={2}
+                        name={NUTRIENT_CONFIG[selectedNutrient].label}
+                        dot={{ r: 4 }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey={NUTRIENT_CONFIG[selectedNutrient].std}
+                        stroke="#D93025"
+                        strokeWidth={2}
+                        strokeDasharray="5 5"
+                        name={`Standar BGN`}
+                        dot={false}
+                        opacity={0.5}
+                      />
+                    </>
+                  )}
+                </LineChart>
+              </ResponsiveContainer>
+            )}
           </div>
         </CardContent>
       </Card>
