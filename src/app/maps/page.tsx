@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   TooltipProvider,
 } from '@/components/ui/tooltip'
@@ -24,6 +25,7 @@ import {
   VideoIcon,
   CheckCircleIcon,
   CircleIcon,
+  MapPinIcon,
 } from 'lucide-react'
 
 // ─── Dynamic Import of Leaflet Map to avoid SSR errors ───
@@ -220,145 +222,164 @@ export default function MapsPage() {
     <TooltipProvider>
       <div className="space-y-6 p-6">
         {/* ── Header ──────────────────────────────── */}
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Peta &amp; CCTV</h1>
-          <p className="text-muted-foreground">Monitoring sebaran lokasi dapur program gizi dan CCTV secara real-time</p>
-        </div>
-
-        {/* ── Map + Sidebar ───────────────────────── */}
-        <div className="flex flex-col lg:flex-row gap-6">
-          {/* Map Section */}
-          <Card className="flex-1 overflow-hidden">
-            <CardContent className="p-0 relative">
-              {/* Render Leaflet map inner component dynamically */}
-              <div className="relative h-[500px] lg:h-[600px] m-4 rounded-lg overflow-hidden border border-border">
-                <MapInner
-                  dapurs={MOCK_DAPUR}
-                  selectedDapurId={selectedDapur}
-                  setSelectedDapurId={setSelectedDapur}
-                  onViewCctv={(d) => setCctvDapur(d)}
-                />
-              </div>
-
-              {/* Legend */}
-              <div className="flex items-center gap-4 px-4 pb-4">
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <div className="size-2.5 rounded-full bg-emerald-500" />
-                  Normal
-                </div>
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <div className="size-2.5 rounded-full bg-amber-500" />
-                  Warning
-                </div>
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <div className="size-2.5 rounded-full bg-red-500" />
-                  Kritis
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Sidebar */}
-          <div className="w-full lg:w-[380px] shrink-0 space-y-4">
-            {/* Search */}
-            <div className="relative">
-              <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-              <Input
-                placeholder="Cari dapur..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-9"
-              />
-            </div>
-
-            {/* Dapur list */}
-            <ScrollArea className="h-[460px] lg:h-[548px]">
-              <div className="space-y-3 pr-1">
-                {filtered.length === 0 ? (
-                  <p className="text-center text-sm text-muted-foreground py-8">
-                    Tidak ada dapur ditemukan
-                  </p>
-                ) : (
-                  filtered.map((dapur) => {
-                    const color = STATUS_COLORS[dapur.status]
-                    const isSelected = selectedDapur === dapur.id
-
-                    return (
-                      <Card
-                        key={dapur.id}
-                        className={`cursor-pointer transition-all hover:shadow-md ${
-                          isSelected ? 'ring-2 ring-primary border-primary bg-muted/20' : ''
-                        }`}
-                        onClick={() =>
-                          setSelectedDapur(isSelected ? null : dapur.id)
-                        }
-                      >
-                        <CardContent className="p-4 space-y-2">
-                          <div className="flex items-start justify-between gap-2">
-                            <div className="min-w-0">
-                              <p className="font-semibold text-sm truncate">{dapur.nama}</p>
-                              <p className="text-xs text-muted-foreground truncate">{dapur.alamat}</p>
-                            </div>
-                            <Badge variant="outline" className={`shrink-0 text-xs ${color.badge}`}>
-                              <CircleIcon className={`size-2 fill-current ${color.dot.replace('bg-', 'text-')}`} />
-                              <span className="ml-1">{color.label}</span>
-                            </Badge>
-                          </div>
-                          <div className="flex items-center justify-between text-sm">
-                            <span className="text-muted-foreground">Porsi Hari Ini</span>
-                            <span className="font-semibold">{dapur.porsiHariIni.toLocaleString('id-ID')}</span>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    )
-                  })
-                )}
-              </div>
-            </ScrollArea>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">Peta &amp; CCTV</h1>
+            <p className="text-muted-foreground">Monitoring sebaran lokasi dapur program gizi dan CCTV secara real-time</p>
           </div>
         </div>
 
-        {/* ── CCTV Section ────────────────────────── */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <VideoIcon className="size-5" />
+        <Tabs defaultValue="peta" className="space-y-6">
+          <TabsList className="grid w-full max-w-[400px] grid-cols-2">
+            <TabsTrigger value="peta" className="flex items-center gap-2">
+              <MapPinIcon className="size-4" />
+              Peta Lokasi
+            </TabsTrigger>
+            <TabsTrigger value="cctv" className="flex items-center gap-2">
+              <VideoIcon className="size-4" />
               CCTV Viewer
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {CCTV_DAPUR.map((dapur) => {
-                const color = STATUS_COLORS[dapur.status]
-                return (
-                  <Card key={dapur.id} className="bg-muted/50">
-                    <CardContent className="p-4 space-y-3">
-                      <div className="flex items-center gap-2">
-                        <VideoIcon className="size-5 text-primary shrink-0" />
-                        <div className="min-w-0">
-                          <p className="text-sm font-medium truncate">{dapur.nama}</p>
-                          <div className="flex items-center gap-1.5 mt-0.5">
-                            <div className={`size-2 rounded-full ${color.dot}`} />
-                            <span className="text-xs text-muted-foreground">{color.label}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-full"
-                        onClick={() => setCctvDapur(dapur)}
-                      >
-                        <VideoIcon className="size-3.5 mr-1.5" />
-                        Lihat CCTV
-                      </Button>
-                    </CardContent>
-                  </Card>
-                )
-              })}
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="peta" className="space-y-6 outline-none">
+            {/* ── Map + Sidebar ───────────────────────── */}
+            <div className="flex flex-col lg:flex-row gap-6">
+              {/* Map Section */}
+              <Card className="flex-1 overflow-hidden">
+                <CardContent className="p-0 relative">
+                  {/* Render Leaflet map inner component dynamically */}
+                  <div className="relative h-[500px] lg:h-[600px] m-4 rounded-lg overflow-hidden border border-border">
+                    <MapInner
+                      dapurs={MOCK_DAPUR}
+                      selectedDapurId={selectedDapur}
+                      setSelectedDapurId={setSelectedDapur}
+                      onViewCctv={(d) => setCctvDapur(d)}
+                    />
+                  </div>
+
+                  {/* Legend */}
+                  <div className="flex items-center gap-4 px-4 pb-4">
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <div className="size-2.5 rounded-full bg-emerald-500" />
+                      Normal
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <div className="size-2.5 rounded-full bg-amber-500" />
+                      Warning
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <div className="size-2.5 rounded-full bg-red-500" />
+                      Kritis
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Sidebar */}
+              <div className="w-full lg:w-[380px] shrink-0 space-y-4">
+                {/* Search */}
+                <div className="relative">
+                  <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Cari dapur..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="pl-9"
+                  />
+                </div>
+
+                {/* Dapur list */}
+                <ScrollArea className="h-[460px] lg:h-[548px]">
+                  <div className="space-y-3 pr-1">
+                    {filtered.length === 0 ? (
+                      <p className="text-center text-sm text-muted-foreground py-8">
+                        Tidak ada dapur ditemukan
+                      </p>
+                    ) : (
+                      filtered.map((dapur) => {
+                        const color = STATUS_COLORS[dapur.status]
+                        const isSelected = selectedDapur === dapur.id
+
+                        return (
+                          <Card
+                            key={dapur.id}
+                            className={`cursor-pointer transition-all hover:shadow-md ${
+                              isSelected ? 'ring-2 ring-primary border-primary bg-muted/20' : ''
+                            }`}
+                            onClick={() =>
+                              setSelectedDapur(isSelected ? null : dapur.id)
+                            }
+                          >
+                            <CardContent className="p-4 space-y-2">
+                              <div className="flex items-start justify-between gap-2">
+                                <div className="min-w-0">
+                                  <p className="font-semibold text-sm truncate">{dapur.nama}</p>
+                                  <p className="text-xs text-muted-foreground truncate">{dapur.alamat}</p>
+                                </div>
+                                <Badge variant="outline" className={`shrink-0 text-xs ${color.badge}`}>
+                                  <CircleIcon className={`size-2 fill-current ${color.dot.replace('bg-', 'text-')}`} />
+                                  <span className="ml-1">{color.label}</span>
+                                </Badge>
+                              </div>
+                              <div className="flex items-center justify-between text-sm">
+                                <span className="text-muted-foreground">Porsi Hari Ini</span>
+                                <span className="font-semibold">{dapur.porsiHariIni.toLocaleString('id-ID')}</span>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        )
+                      })
+                    )}
+                  </div>
+                </ScrollArea>
+              </div>
             </div>
-          </CardContent>
-        </Card>
+          </TabsContent>
+
+          <TabsContent value="cctv" className="space-y-6 outline-none">
+            {/* ── CCTV Section ────────────────────────── */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <VideoIcon className="size-5" />
+                  CCTV Viewer
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  {CCTV_DAPUR.map((dapur) => {
+                    const color = STATUS_COLORS[dapur.status]
+                    return (
+                      <Card key={dapur.id} className="bg-muted/50">
+                        <CardContent className="p-4 space-y-3">
+                          <div className="flex items-center gap-2">
+                            <VideoIcon className="size-5 text-primary shrink-0" />
+                            <div className="min-w-0">
+                              <p className="text-sm font-medium truncate">{dapur.nama}</p>
+                              <div className="flex items-center gap-1.5 mt-0.5">
+                                <div className={`size-2 rounded-full ${color.dot}`} />
+                                <span className="text-xs text-muted-foreground">{color.label}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full"
+                            onClick={() => setCctvDapur(dapur)}
+                          >
+                            <VideoIcon className="size-3.5 mr-1.5" />
+                            Lihat CCTV
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    )
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
 
         {/* ── CCTV Modal ──────────────────────────── */}
         <CctvModal
