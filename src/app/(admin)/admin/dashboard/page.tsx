@@ -231,8 +231,8 @@ export default function SuperAdminDashboardPage() {
     const active = filteredDapur.filter((d) => d.status === 'Aktif').length
     const inactive = filteredDapur.filter((d) => d.status === 'Nonaktif').length
     return [
-      { name: 'Aktif', value: active, color: '#10B981' },
-      { name: 'Nonaktif', value: inactive, color: '#EF4444' },
+      { name: 'Aktif', value: active, color: 'var(--color-sppg-success)' },
+      { name: 'Nonaktif', value: inactive, color: 'var(--color-sppg-danger)' },
     ]
   }, [filteredDapur])
 
@@ -241,7 +241,7 @@ export default function SuperAdminDashboardPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
             Super Admin Dashboard
           </h1>
           <p className="text-muted-foreground text-sm">
@@ -346,16 +346,16 @@ export default function SuperAdminDashboardPage() {
           <CardContent className="h-[280px] pt-4">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={trendChartData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
-                <XAxis dataKey="name" stroke="#888888" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis stroke="#888888" fontSize={11} tickLine={false} axisLine={false} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                <XAxis dataKey="name" stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} tick={{ fill: 'var(--muted-foreground)' }} />
+                <YAxis stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} tick={{ fill: 'var(--muted-foreground)' }} />
                 <Tooltip
-                  contentStyle={{ background: '#FFF', borderRadius: '8px', border: '1px solid #E5E7EB' }}
+                  contentStyle={{ backgroundColor: 'var(--popover)', borderRadius: 'var(--radius)', border: '1px solid var(--border)', color: 'var(--popover-foreground)' }}
                   labelStyle={{ fontWeight: 'bold' }}
                 />
-                <Legend iconType="circle" wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                <Line type="monotone" dataKey="porsi" name="Realisasi Porsi" stroke="#3B82F6" strokeWidth={2.5} activeDot={{ r: 6 }} />
-                <Line type="monotone" dataKey="target" name="Target BGN" stroke="#9CA3AF" strokeDasharray="5 5" strokeWidth={1.5} />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: '11px', paddingTop: '10px', color: 'var(--foreground)' }} />
+                <Line type="monotone" dataKey="porsi" name="Realisasi Porsi" stroke="var(--primary)" strokeWidth={2.5} activeDot={{ r: 6 }} />
+                <Line type="monotone" dataKey="target" name="Target BGN" stroke="var(--muted-foreground)" strokeDasharray="5 5" strokeWidth={1.5} />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
@@ -375,16 +375,16 @@ export default function SuperAdminDashboardPage() {
           <CardContent className="h-[280px] pt-4">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={barChartData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
-                <XAxis dataKey="name" stroke="#888888" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis stroke="#888888" fontSize={11} tickLine={false} axisLine={false} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                <XAxis dataKey="name" stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} tick={{ fill: 'var(--muted-foreground)' }} />
+                <YAxis stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} tick={{ fill: 'var(--muted-foreground)' }} />
                 <Tooltip
-                  cursor={{ fill: 'rgba(59, 130, 246, 0.05)' }}
-                  contentStyle={{ background: '#FFF', borderRadius: '8px', border: '1px solid #E5E7EB' }}
+                  cursor={{ fill: 'var(--muted)', opacity: 0.15 }}
+                  contentStyle={{ backgroundColor: 'var(--popover)', borderRadius: 'var(--radius)', border: '1px solid var(--border)', color: 'var(--popover-foreground)' }}
                 />
-                <Legend iconType="circle" wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                <Bar dataKey="porsi" name="Realisasi Hari Ini" fill="#10B981" radius={[4, 4, 0, 0]} maxBarSize={45} />
-                <Bar dataKey="kapasitas" name="Kapasitas Maks" fill="#D1D5DB" radius={[4, 4, 0, 0]} maxBarSize={45} />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: '11px', paddingTop: '10px', color: 'var(--foreground)' }} />
+                <Bar dataKey="porsi" name="Realisasi Hari Ini" fill="var(--primary)" radius={[4, 4, 0, 0]} maxBarSize={45} />
+                <Bar dataKey="kapasitas" name="Kapasitas Maks" fill="var(--muted-foreground)" opacity={0.3} radius={[4, 4, 0, 0]} maxBarSize={45} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
