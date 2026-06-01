@@ -200,16 +200,6 @@ export default function SuperAdminDashboardPage() {
     }
   }, [currentUser, router])
 
-  // Loading state
-  if (!currentUser) {
-    return <SuperAdminDashboardSkeleton />
-  }
-
-  // Prevent flash of admin layout content before redirect triggers
-  if (currentUser.role !== 'Super Administrator') {
-    return <SuperAdminDashboardSkeleton />
-  }
-
   // Filter dapur
   const filteredDapur = useMemo(() => {
     if (selectedYayasan === 'all') return MOCK_DAPUR
@@ -235,6 +225,15 @@ export default function SuperAdminDashboardPage() {
       { name: 'Nonaktif', value: inactive, color: 'var(--color-sppg-danger)' },
     ]
   }, [filteredDapur])
+
+  // Loading state & redirection fallback (placed after hooks to follow React rules)
+  if (!currentUser) {
+    return <SuperAdminDashboardSkeleton />
+  }
+
+  if (currentUser.role !== 'Super Administrator') {
+    return <SuperAdminDashboardSkeleton />
+  }
 
   return (
     <div className="space-y-6 p-6">
