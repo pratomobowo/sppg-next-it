@@ -18,7 +18,8 @@ import {
   MapIcon,
   VideoIcon,
   TrendingUpIcon,
-  BarChart3Icon
+  BarChart3Icon,
+  SparklesIcon
 } from 'lucide-react'
 
 import type { NavConfig } from '@/components/app-shell'
@@ -48,7 +49,8 @@ const superAdminNav: NavConfig = {
         { title: 'Maps/CCTV', url: '/maps', icon: MapPinIcon },
         { title: 'Audit Trail', url: '/admin/audit-trail', icon: ScrollTextIcon },
         { title: 'User Management', url: '/admin/users', icon: UsersIcon },
-        { title: 'WA Gateway', url: '/admin/wa-gateway', icon: MessageCircleIcon }
+        { title: 'WA Gateway', url: '/admin/wa-gateway', icon: MessageCircleIcon },
+        { title: 'AI Helper', url: '/ai-helper', icon: SparklesIcon }
       ]
     }
   ]
@@ -73,7 +75,8 @@ const picDapurNav: NavConfig = {
         },
         { title: 'Inventory', url: '/inventory', icon: PackageIcon },
         { title: 'Accounting', url: '/accounting', icon: DollarSignIcon },
-        { title: 'Pengiriman', url: '/pengiriman', icon: TruckIcon }
+        { title: 'Pengiriman', url: '/pengiriman', icon: TruckIcon },
+        { title: 'AI Helper', url: '/ai-helper', icon: SparklesIcon }
       ]
     }
   ]
