@@ -34,7 +34,30 @@ export function SppgShell({ children, title }: { children: ReactNode; title?: st
 
   return (
     <AppShell
-      sidebar={<AppSidebar config={navConfig} />}
+      sidebar={
+        <AppSidebar
+          config={navConfig}
+          header={
+            <div className="flex items-center gap-2 px-2 py-1.5 border-b border-border/50">
+              <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-white border shadow-sm">
+                <img
+                  src="/images/logo-bgn.png"
+                  alt="Logo Badan Gizi Nasional"
+                  className="size-6.5 object-contain"
+                />
+              </div>
+              <div className="flex flex-col min-w-0 group-data-[collapsible=icon]:hidden">
+                <span className="font-bold text-[11px] tracking-tight text-foreground truncate">
+                  BADAN GIZI NASIONAL
+                </span>
+                <span className="text-[9px] text-muted-foreground leading-none mt-0.5 truncate">
+                  Republik Indonesia
+                </span>
+              </div>
+            </div>
+          }
+        />
+      }
       header={
         <AppHeader>
           <Breadcrumb className="hidden sm:block">
