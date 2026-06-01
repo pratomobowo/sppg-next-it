@@ -19,7 +19,8 @@ import {
   VideoIcon,
   TrendingUpIcon,
   BarChart3Icon,
-  SparklesIcon
+  SparklesIcon,
+  Building2Icon
 } from 'lucide-react'
 
 import type { NavConfig } from '@/components/app-shell'
@@ -50,7 +51,8 @@ const superAdminNav: NavConfig = {
         { title: 'Audit Trail', url: '/admin/audit-trail', icon: ScrollTextIcon },
         { title: 'User Management', url: '/admin/users', icon: UsersIcon },
         { title: 'WA Gateway', url: '/admin/wa-gateway', icon: MessageCircleIcon },
-        { title: 'AI Helper', url: '/ai-helper', icon: SparklesIcon }
+        { title: 'AI Helper', url: '/ai-helper', icon: SparklesIcon },
+        { title: 'Tenant Management', url: '/tenant-management', icon: Building2Icon }
       ]
     }
   ]
