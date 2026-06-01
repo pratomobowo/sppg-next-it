@@ -35,6 +35,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Progress } from '@/components/ui/progress'
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -42,6 +43,7 @@ import {
   PlusIcon,
   PowerIcon,
   UploadIcon,
+  HeartIcon
 } from 'lucide-react'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -430,6 +432,73 @@ function PenjadwalanMenuTab() {
     toast.info(`"${item}" dihapus dari menu`)
   }
 
+  const getNutrientsForMenuItem = (itemName: string) => {
+    switch (itemName) {
+      case 'Nasi Putih':
+        return { kalori: 360, karbohidrat: 78.9, protein: 6.8, lemak: 0.7, serat: 1.2 }
+      case 'Ayam Goreng':
+      case 'Ayam Bakar':
+        return { kalori: 165, karbohidrat: 0, protein: 31, lemak: 3.6, serat: 0 }
+      case 'Ikan Goreng':
+        return { kalori: 134, karbohidrat: 0, protein: 26, lemak: 3.1, serat: 0 }
+      case 'Telur Dadar':
+        return { kalori: 155, karbohidrat: 1.1, protein: 12.6, lemak: 10.6, serat: 0 }
+      case 'Tahu Goreng':
+        return { kalori: 76, karbohidrat: 1.9, protein: 8.1, lemak: 4.8, serat: 0.8 }
+      case 'Tempe Goreng':
+        return { kalori: 193, karbohidrat: 9.4, protein: 18.5, lemak: 10.8, serat: 1.4 }
+      case 'Sayur Sop':
+      case 'Sayur Asem':
+        return { kalori: 30, karbohidrat: 6.3, protein: 1.8, lemak: 0.2, serat: 1.5 }
+      case 'Cah Kangkung':
+      case 'Tumis Tauge':
+        return { kalori: 19, karbohidrat: 3.1, protein: 2.6, lemak: 0.2, serat: 2.0 }
+      case 'Pisang':
+      case 'Pepaya':
+        return { kalori: 89, karbohidrat: 22.8, protein: 1.1, lemak: 0.3, serat: 2.6 }
+      case 'Jeruk':
+      case 'Semangka':
+      case 'Apel':
+        return { kalori: 47, karbohidrat: 11.8, protein: 0.9, lemak: 0.1, serat: 1.8 }
+      default:
+        return { kalori: 80, karbohidrat: 15, protein: 2.0, lemak: 0.5, serat: 1.0 }
+    }
+  }
+
+  const totals = useMemo(() => {
+    let kalori = 0
+    let karbohidrat = 0
+    let protein = 0
+    let lemak = 0
+    let serat = 0
+
+    if (selectedAssignment) {
+      selectedAssignment.items.forEach((item) => {
+        const nut = getNutrientsForMenuItem(item)
+        kalori += nut.kalori
+        karbohidrat += nut.karbohidrat
+        protein += nut.protein
+        lemak += nut.lemak
+        serat += nut.serat
+      })
+    }
+
+    return {
+      kalori: Math.round(kalori),
+      karbohidrat: Math.round(karbohidrat * 10) / 10,
+      protein: Math.round(protein * 10) / 10,
+      lemak: Math.round(lemak * 10) / 10,
+      serat: Math.round(serat * 10) / 10,
+    }
+  }, [selectedAssignment])
+
+  const standards = {
+    kalori: 700,
+    karbohidrat: 100,
+    protein: 25,
+    lemak: 20
+  }
+
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">Atur jadwal menu harian per dapur</p>
@@ -537,6 +606,75 @@ function PenjadwalanMenuTab() {
                       ))}
                     </SelectContent>
                   </Select>
+
+                  {/* Kalkulator Gizi Menu (Standar BGN) */}
+                  <div className="border-t pt-4 mt-4 space-y-3">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                      <HeartIcon className="size-3.5 text-rose-500 fill-rose-500" />
+                      Kalkulator Gizi (per Porsi)
+                    </h4>
+
+                    {selectedAssignment && selectedAssignment.items.length > 0 ? (
+                      <div className="space-y-3 text-xs">
+                        {/* Kalori */}
+                        <div className="space-y-1">
+                          <div className="flex justify-between font-semibold">
+                            <span>Kalori (kcal)</span>
+                            <span className="text-muted-foreground">{totals.kalori} / {standards.kalori} kcal</span>
+                          </div>
+                          <Progress value={Math.min((totals.kalori / standards.kalori) * 100, 100)} className="h-1.5" />
+                        </div>
+
+                        {/* Karbohidrat */}
+                        <div className="space-y-1">
+                          <div className="flex justify-between font-semibold">
+                            <span>Karbohidrat</span>
+                            <span className="text-muted-foreground">{totals.karbohidrat}g / {standards.karbohidrat}g</span>
+                          </div>
+                          <Progress value={Math.min((totals.karbohidrat / standards.karbohidrat) * 100, 100)} className="h-1.5 bg-blue-100 dark:bg-blue-950/30 [&>div]:bg-blue-500" />
+                        </div>
+
+                        {/* Protein */}
+                        <div className="space-y-1">
+                          <div className="flex justify-between font-semibold">
+                            <span>Protein</span>
+                            <span className="text-muted-foreground">{totals.protein}g / {standards.protein}g</span>
+                          </div>
+                          <Progress value={Math.min((totals.protein / standards.protein) * 100, 100)} className="h-1.5 bg-emerald-100 dark:bg-emerald-950/30 [&>div]:bg-emerald-500" />
+                        </div>
+
+                        {/* Lemak */}
+                        <div className="space-y-1">
+                          <div className="flex justify-between font-semibold">
+                            <span>Lemak</span>
+                            <span className="text-muted-foreground">{totals.lemak}g / {standards.lemak}g</span>
+                          </div>
+                          <Progress value={Math.min((totals.lemak / standards.lemak) * 100, 100)} className="h-1.5 bg-amber-100 dark:bg-amber-950/30 [&>div]:bg-amber-500" />
+                        </div>
+
+                        {/* Rekomendasi/Keterangan */}
+                        <div className="mt-3 p-2 bg-muted/40 border rounded-lg">
+                          {totals.kalori < 600 ? (
+                            <p className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">
+                              ⚠️ Kalori di bawah standar BGN (700 kcal). Pertimbangkan menambah porsi nasi atau lauk pauk.
+                            </p>
+                          ) : totals.protein < 20 ? (
+                            <p className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">
+                              ⚠️ Kandungan protein kurang dari standar BGN (25g). Tambahkan lauk hewani seperti telur atau ayam.
+                            </p>
+                          ) : (
+                            <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
+                              ✅ Komposisi menu memenuhi standar gizi BGN.
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-[11px] text-muted-foreground italic">
+                        Tambahkan item menu untuk melihat estimasi kandungan gizi dan kecocokan standar BGN.
+                      </p>
+                    )}
+                  </div>
                 </div>
               ) : (
                 <p className="text-sm text-muted-foreground">Klik tanggal pada kalender untuk melihat dan mengatur menu.</p>
