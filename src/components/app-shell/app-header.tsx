@@ -25,6 +25,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
 import { SidebarTrigger } from '@/components/ui/sidebar'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 const ROLES: UserRole[] = [
   'Super Administrator',
@@ -111,6 +112,9 @@ export function AppHeader({ children, actions }: AppHeaderProps) {
                 <span className="relative inline-flex size-2 rounded-full bg-red-500" />
               </span>
             </Button>
+
+            {/* Theme Toggle */}
+            <ThemeToggle />
 
             {/* User avatar + dropdown */}
             <DropdownMenu>
