@@ -37,7 +37,7 @@ const ROLES: UserRole[] = [
   'Investor',
 ]
 
-const CAN_SWITCH = ['Super Administrator', 'PIC Dapur (Admin Yayasan)'] as UserRole[]
+const CAN_SWITCH = ROLES
 
 type AppHeaderProps = {
   /** Content rendered between the sidebar trigger and the action area (e.g. breadcrumbs, page title). */
