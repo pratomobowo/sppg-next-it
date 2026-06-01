@@ -1,7 +1,7 @@
 'use client'
 
 import { type ReactNode, useEffect, useState } from 'react'
-import { AppFooter, AppHeader, AppShell, AppSidebar } from '@/components/app-shell'
+import { AppHeader, AppShell, AppSidebar } from '@/components/app-shell'
 import { useAuth } from '@/lib/auth'
 import { getNavConfig } from '@/config/nav'
 import {
@@ -46,6 +46,15 @@ export function SppgShell({ children, title }: { children: ReactNode; title?: st
               />
             </div>
           }
+          footer={
+            <div className="px-3 py-3 border-t border-border/40 group-data-[collapsible=icon]:hidden">
+              <p className="text-[10px] text-muted-foreground leading-relaxed">
+                ©{new Date().getFullYear()}{' '}
+                <span className="font-medium text-foreground/70">PT Niaga Expert Teknologi</span>
+              </p>
+              <p className="text-[10px] text-muted-foreground/60">Sistem Monitoring SPPG MBG</p>
+            </div>
+          }
         />
       }
       header={
@@ -63,7 +72,7 @@ export function SppgShell({ children, title }: { children: ReactNode; title?: st
           </Breadcrumb>
         </AppHeader>
       }
-      footer={<AppFooter />}
+
     >
       {children}
     </AppShell>
