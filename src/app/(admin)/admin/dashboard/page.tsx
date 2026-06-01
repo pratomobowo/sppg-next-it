@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
 import { formatRupiah } from '@/lib/utils'
 import Link from 'next/link'
@@ -86,10 +87,31 @@ function SuperAdminDashboardSkeleton() {
 
 export default function SuperAdminDashboardPage() {
   const { currentUser } = useAuth()
+  const router = useRouter()
   const [selectedYayasan, setSelectedYayasan] = useState('all')
+
+  useEffect(() => {
+    if (currentUser && currentUser.role !== 'Super Administrator') {
+      const r = currentUser.role
+      const dest =
+        r === 'BGN (Badan Gizi Nasional)'
+          ? '/compliance-dashboard'
+          : r === 'Investor'
+          ? '/investor-dashboard'
+          : r.startsWith('Kepala') || r.startsWith('Full')
+          ? '/approval-queue'
+          : '/dashboard'
+      router.replace(dest)
+    }
+  }, [currentUser, router])
 
   // Loading state
   if (!currentUser) {
+    return <SuperAdminDashboardSkeleton />
+  }
+
+  // Prevent flash of admin layout content before redirect triggers
+  if (currentUser.role !== 'Super Administrator') {
     return <SuperAdminDashboardSkeleton />
   }
 

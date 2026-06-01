@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
 import { formatRupiah } from '@/lib/utils'
 import Link from 'next/link'
@@ -82,9 +84,30 @@ function PICDashboardSkeleton() {
 
 export default function PICDashboard() {
   const { currentUser } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (currentUser) {
+      const r = currentUser.role
+      if (r === 'Super Administrator') {
+        router.replace('/admin/dashboard')
+      } else if (r === 'BGN (Badan Gizi Nasional)') {
+        router.replace('/compliance-dashboard')
+      } else if (r === 'Investor') {
+        router.replace('/investor-dashboard')
+      } else if (r.startsWith('Kepala') || r.startsWith('Full')) {
+        router.replace('/approval-queue')
+      }
+    }
+  }, [currentUser, router])
 
   // ═══ Loading State ═══
   if (!currentUser) {
+    return <PICDashboardSkeleton />
+  }
+
+  // If the user's role is not PIC, we don't render the dashboard page since they will be redirected.
+  if (currentUser.role !== 'PIC Dapur (Admin Yayasan)') {
     return <PICDashboardSkeleton />
   }
 

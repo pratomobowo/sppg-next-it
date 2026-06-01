@@ -1,7 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import { AlertTriangleIcon, CheckIcon, ChevronDownIcon } from 'lucide-react'
+import {
+  AlertTriangleIcon,
+  CheckIcon,
+  ChevronDownIcon,
+  PackageIcon,
+  CheckCircle2Icon,
+  AlertCircleIcon
+} from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -134,6 +141,11 @@ export default function InventoryPage() {
     toast.success('Stock opname berhasil disimpan')
   }
 
+  const totalItems = MOCK_INVENTORY.length
+  const normalItems = MOCK_INVENTORY.filter((item) => item.status === 'Normal').length
+  const lowItems = MOCK_INVENTORY.filter((item) => item.status === 'Rendah').length
+  const criticalItems = MOCK_INVENTORY.filter((item) => item.status === 'Kritis').length
+
   return (
     <div className="space-y-6 p-6">
       {/* Header */}
@@ -142,6 +154,61 @@ export default function InventoryPage() {
         <p className="text-sm text-muted-foreground">
           Manajemen stok bahan baku dapur
         </p>
+      </div>
+
+      {/* Summary Cards */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Total Item */}
+        <Card>
+          <CardContent className="flex items-center justify-between p-6">
+            <div className="space-y-1">
+              <p className="text-xs text-muted-foreground font-medium">Total Item Bahan</p>
+              <p className="text-2xl font-bold">{totalItems}</p>
+            </div>
+            <div className="bg-primary/10 text-primary p-2.5 rounded-xl">
+              <PackageIcon className="size-5" />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Normal */}
+        <Card>
+          <CardContent className="flex items-center justify-between p-6">
+            <div className="space-y-1">
+              <p className="text-xs text-muted-foreground font-medium">Status Normal</p>
+              <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{normalItems}</p>
+            </div>
+            <div className="bg-emerald-100 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 p-2.5 rounded-xl">
+              <CheckCircle2Icon className="size-5" />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Rendah */}
+        <Card>
+          <CardContent className="flex items-center justify-between p-6">
+            <div className="space-y-1">
+              <p className="text-xs text-muted-foreground font-medium">Stok Rendah</p>
+              <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">{lowItems}</p>
+            </div>
+            <div className="bg-amber-100 dark:bg-amber-950/20 text-amber-600 dark:text-amber-400 p-2.5 rounded-xl">
+              <AlertCircleIcon className="size-5" />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Kritis */}
+        <Card>
+          <CardContent className="flex items-center justify-between p-6">
+            <div className="space-y-1">
+              <p className="text-xs text-muted-foreground font-medium">Stok Kritis</p>
+              <p className="text-2xl font-bold text-red-600 dark:text-red-400">{criticalItems}</p>
+            </div>
+            <div className="bg-red-100 dark:bg-red-950/20 text-red-600 dark:text-red-400 p-2.5 rounded-xl">
+              <AlertTriangleIcon className="size-5 animate-pulse" />
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Filter Bar */}

@@ -132,7 +132,19 @@ export default function LoginPage() {
     toast.success(`Selamat datang, ${user.firstName}!`, {
       description: `Login sebagai ${role}`,
     })
-    router.push('/dashboard')
+    
+    const dest =
+      role === 'Super Administrator'
+        ? '/admin/dashboard'
+        : role === 'BGN (Badan Gizi Nasional)'
+        ? '/compliance-dashboard'
+        : role === 'Investor'
+        ? '/investor-dashboard'
+        : role.startsWith('Kepala') || role.startsWith('Full')
+        ? '/approval-queue'
+        : '/dashboard'
+
+    router.push(dest)
     setSubmitting(false)
   }
 
