@@ -200,6 +200,9 @@ export default function SuperAdminDashboardPage() {
     }
   }, [currentUser, router])
 
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+
   // Filter dapur
   const filteredDapur = useMemo(() => {
     if (selectedYayasan === 'all') return MOCK_DAPUR
@@ -343,20 +346,24 @@ export default function SuperAdminDashboardPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="h-[280px] pt-4">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={trendChartData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-                <XAxis dataKey="name" stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} tick={{ fill: 'var(--muted-foreground)' }} />
-                <YAxis stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} tick={{ fill: 'var(--muted-foreground)' }} />
-                <Tooltip
-                  contentStyle={{ backgroundColor: 'var(--popover)', borderRadius: 'var(--radius)', border: '1px solid var(--border)', color: 'var(--popover-foreground)' }}
-                  labelStyle={{ fontWeight: 'bold' }}
-                />
-                <Legend iconType="circle" wrapperStyle={{ fontSize: '11px', paddingTop: '10px', color: 'var(--foreground)' }} />
-                <Line type="monotone" dataKey="porsi" name="Realisasi Porsi" stroke="var(--primary)" strokeWidth={2.5} activeDot={{ r: 6 }} />
-                <Line type="monotone" dataKey="target" name="Target BGN" stroke="var(--muted-foreground)" strokeDasharray="5 5" strokeWidth={1.5} />
-              </LineChart>
-            </ResponsiveContainer>
+            {mounted ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={trendChartData}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                  <XAxis dataKey="name" stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} tick={{ fill: 'var(--muted-foreground)' }} />
+                  <YAxis stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} tick={{ fill: 'var(--muted-foreground)' }} />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: 'var(--popover)', borderRadius: 'var(--radius)', border: '1px solid var(--border)', color: 'var(--popover-foreground)' }}
+                    labelStyle={{ fontWeight: 'bold' }}
+                  />
+                  <Legend iconType="circle" wrapperStyle={{ fontSize: '11px', paddingTop: '10px', color: 'var(--foreground)' }} />
+                  <Line type="monotone" dataKey="porsi" name="Realisasi Porsi" stroke="var(--primary)" strokeWidth={2.5} activeDot={{ r: 6 }} />
+                  <Line type="monotone" dataKey="target" name="Target BGN" stroke="var(--muted-foreground)" strokeDasharray="5 5" strokeWidth={1.5} />
+                </LineChart>
+              </ResponsiveContainer>
+            ) : (
+              <Skeleton className="h-full w-full" />
+            )}
           </CardContent>
         </Card>
 
@@ -372,20 +379,24 @@ export default function SuperAdminDashboardPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="h-[280px] pt-4">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={barChartData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-                <XAxis dataKey="name" stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} tick={{ fill: 'var(--muted-foreground)' }} />
-                <YAxis stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} tick={{ fill: 'var(--muted-foreground)' }} />
-                <Tooltip
-                  cursor={{ fill: 'var(--muted)', opacity: 0.15 }}
-                  contentStyle={{ backgroundColor: 'var(--popover)', borderRadius: 'var(--radius)', border: '1px solid var(--border)', color: 'var(--popover-foreground)' }}
-                />
-                <Legend iconType="circle" wrapperStyle={{ fontSize: '11px', paddingTop: '10px', color: 'var(--foreground)' }} />
-                <Bar dataKey="porsi" name="Realisasi Hari Ini" fill="var(--primary)" radius={[4, 4, 0, 0]} maxBarSize={45} />
-                <Bar dataKey="kapasitas" name="Kapasitas Maks" fill="var(--muted-foreground)" opacity={0.3} radius={[4, 4, 0, 0]} maxBarSize={45} />
-              </BarChart>
-            </ResponsiveContainer>
+            {mounted ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={barChartData}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                  <XAxis dataKey="name" stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} tick={{ fill: 'var(--muted-foreground)' }} />
+                  <YAxis stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} tick={{ fill: 'var(--muted-foreground)' }} />
+                  <Tooltip
+                    cursor={{ fill: 'var(--muted)', opacity: 0.15 }}
+                    contentStyle={{ backgroundColor: 'var(--popover)', borderRadius: 'var(--radius)', border: '1px solid var(--border)', color: 'var(--popover-foreground)' }}
+                  />
+                  <Legend iconType="circle" wrapperStyle={{ fontSize: '11px', paddingTop: '10px', color: 'var(--foreground)' }} />
+                  <Bar dataKey="porsi" name="Realisasi Hari Ini" fill="var(--primary)" radius={[4, 4, 0, 0]} maxBarSize={45} />
+                  <Bar dataKey="kapasitas" name="Kapasitas Maks" fill="var(--muted-foreground)" opacity={0.3} radius={[4, 4, 0, 0]} maxBarSize={45} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <Skeleton className="h-full w-full" />
+            )}
           </CardContent>
         </Card>
       </div>
@@ -458,22 +469,26 @@ export default function SuperAdminDashboardPage() {
             </CardHeader>
             <CardContent className="flex items-center justify-between py-2">
               <div className="size-[120px] shrink-0">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={statusPieData}
-                      innerRadius={40}
-                      outerRadius={55}
-                      paddingAngle={4}
-                      dataKey="value"
-                    >
-                      {statusPieData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
+                {mounted ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={statusPieData}
+                        innerRadius={40}
+                        outerRadius={55}
+                        paddingAngle={4}
+                        dataKey="value"
+                      >
+                        {statusPieData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <Skeleton className="size-full rounded-full" />
+                )}
               </div>
 
               {/* Legend details */}
