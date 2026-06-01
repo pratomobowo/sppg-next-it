@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useAuth } from '@/lib/auth'
+import dynamic from 'next/dynamic'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -9,10 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import {
-  Tooltip,
-  TooltipContent,
   TooltipProvider,
-  TooltipTrigger,
 } from '@/components/ui/tooltip'
 import {
   Dialog,
@@ -22,12 +20,14 @@ import {
 } from '@/components/ui/dialog'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
-  MapPinIcon,
   SearchIcon,
   VideoIcon,
   CheckCircleIcon,
   CircleIcon,
 } from 'lucide-react'
+
+// ─── Dynamic Import of Leaflet Map to avoid SSR errors ───
+const MapInner = dynamic(() => import('./MapInner'), { ssr: false })
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -39,8 +39,7 @@ type Dapur = {
   alamat: string
   status: DapurStatus
   porsiHariIni: number
-  lat: number  // percentage 0-100 for positioning
-  lng: number  // percentage 0-100 for positioning
+  coords: [number, number]
   hasCctv: boolean
 }
 
@@ -50,41 +49,37 @@ const MOCK_DAPUR: Dapur[] = [
   {
     id: 'dpr-001',
     nama: 'Dapur Sejahtera 1',
-    alamat: 'Jl. Merdeka No. 10, Jakarta Pusat',
+    alamat: 'Jl. Raya Pasar Minggu No. 10, Jakarta Selatan',
     status: 'normal',
     porsiHariIni: 350,
-    lat: 20,
-    lng: 30,
+    coords: [-6.2608, 106.8209],
     hasCctv: true,
   },
   {
     id: 'dpr-002',
     nama: 'Dapur Sejahtera 2',
-    alamat: 'Jl. Sudirman No. 25, Jakarta Selatan',
+    alamat: 'Jl. Raya Condet No. 25, Jakarta Timur',
     status: 'normal',
     porsiHariIni: 420,
-    lat: 35,
-    lng: 60,
+    coords: [-6.2759, 106.8535],
     hasCctv: true,
   },
   {
     id: 'dpr-003',
     nama: 'Dapur Harapan',
-    alamat: 'Jl. Thamrin No. 5, Jakarta Pusat',
+    alamat: 'Jl. Tebet Barat No. 5, Jakarta Selatan',
     status: 'normal',
     porsiHariIni: 280,
-    lat: 55,
-    lng: 25,
+    coords: [-6.2146, 106.8451],
     hasCctv: false,
   },
   {
     id: 'dpr-004',
     nama: 'Dapur Nusantara',
-    alamat: 'Jl. Gatot Subroto No. 8, Jakarta Timur',
+    alamat: 'Jl. Iskandarsyah No. 8, Jakarta Selatan',
     status: 'warning',
     porsiHariIni: 190,
-    lat: 30,
-    lng: 80,
+    coords: [-6.2512, 106.7972],
     hasCctv: true,
   },
   {
@@ -93,18 +88,16 @@ const MOCK_DAPUR: Dapur[] = [
     alamat: 'Jl. Kebon Sirih No. 12, Jakarta Pusat',
     status: 'warning',
     porsiHariIni: 310,
-    lat: 65,
-    lng: 50,
+    coords: [-6.2421, 106.8123],
     hasCctv: false,
   },
   {
     id: 'dpr-006',
     nama: 'Dapur Prima',
-    alamat: 'Jl. Casablanca No. 3, Jakarta Selatan',
+    alamat: 'Jl. CASABLANCA No. 3, Jakarta Selatan',
     status: 'kritis',
     porsiHariIni: 75,
-    lat: 45,
-    lng: 40,
+    coords: [-6.2801, 106.8150],
     hasCctv: true,
   },
   {
@@ -113,8 +106,7 @@ const MOCK_DAPUR: Dapur[] = [
     alamat: 'Jl. Diponegoro No. 18, Jakarta Pusat',
     status: 'normal',
     porsiHariIni: 500,
-    lat: 75,
-    lng: 70,
+    coords: [-6.2301, 106.8310],
     hasCctv: false,
   },
   {
@@ -123,8 +115,7 @@ const MOCK_DAPUR: Dapur[] = [
     alamat: 'Jl. Pemuda No. 22, Jakarta Timur',
     status: 'normal',
     porsiHariIni: 265,
-    lat: 15,
-    lng: 55,
+    coords: [-6.2912, 106.8322],
     hasCctv: true,
   },
 ]
@@ -160,37 +151,6 @@ function MapsSkeleton() {
   )
 }
 
-// ─── Pin Marker Component ─────────────────────────────────────────────────────
-
-function PinMarker({ dapur, onClick }: { dapur: Dapur; onClick: () => void }) {
-  const color = STATUS_COLORS[dapur.status]
-
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <button
-          onClick={onClick}
-          className="absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
-          style={{ left: `${dapur.lng}%`, top: `${dapur.lat}%` }}
-        >
-          {/* Pin body */}
-          <div
-            className={`size-4 rounded-full ${color.dot} shadow-md ring-2 ring-white transition-transform group-hover:scale-125`}
-          />
-          {/* Pulse ring */}
-          <div
-            className={`absolute inset-0 size-4 rounded-full ${color.dot} opacity-30 animate-ping`}
-          />
-        </button>
-      </TooltipTrigger>
-      <TooltipContent side="top">
-        <p className="font-medium">{dapur.nama}</p>
-        <p className="text-xs text-muted-foreground">{color.label} — {dapur.porsiHariIni} porsi</p>
-      </TooltipContent>
-    </Tooltip>
-  )
-}
-
 // ─── CCTV Viewer Modal ────────────────────────────────────────────────────────
 
 function CctvModal({
@@ -210,15 +170,28 @@ function CctvModal({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <VideoIcon className="size-5" />
-            CCTV — {dapur.nama}
+            CCTV Live Stream — {dapur.nama}
           </DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col items-center justify-center aspect-video bg-black/80 rounded-lg border border-border">
-          <VideoIcon className="size-16 text-muted-foreground/40 mb-4" />
-          <p className="text-muted-foreground font-medium">Stream CCTV akan tersedia</p>
-          <p className="text-xs text-muted-foreground/60 mt-1">
-            Integrasi kamera CCTV {dapur.nama} dalam pengembangan
-          </p>
+        {/* Render a simulated HTML5 video loop player to mimic real live CCTV stream */}
+        <div className="relative aspect-video bg-black rounded-lg overflow-hidden border border-border">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+          >
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-kitchen-chef-preparing-a-meal-41584-large.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <div className="absolute top-3 left-3 bg-red-600 text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded flex items-center gap-1.5 shadow z-10 animate-pulse">
+            <span className="size-1.5 rounded-full bg-white block" />
+            LIVE
+          </div>
+          <div className="absolute bottom-3 right-3 bg-black/60 text-white text-[10px] font-mono px-2 py-0.5 rounded shadow z-10">
+            {dapur.nama} · CAM 01
+          </div>
         </div>
       </DialogContent>
     </Dialog>
@@ -249,7 +222,7 @@ export default function MapsPage() {
         {/* ── Header ──────────────────────────────── */}
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Peta &amp; CCTV</h1>
-          <p className="text-muted-foreground">Monitoring lokasi dapur dan CCTV</p>
+          <p className="text-muted-foreground">Monitoring sebaran lokasi dapur program gizi dan CCTV secara real-time</p>
         </div>
 
         {/* ── Map + Sidebar ───────────────────────── */}
@@ -257,23 +230,14 @@ export default function MapsPage() {
           {/* Map Section */}
           <Card className="flex-1 overflow-hidden">
             <CardContent className="p-0 relative">
-              {/* Map placeholder */}
-              <div className="relative h-[500px] lg:h-[600px] bg-muted border border-dashed border-border rounded-lg m-4">
-                {/* Center text */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                  <MapPinIcon className="size-10 text-muted-foreground/30 mb-2" />
-                  <p className="text-lg font-medium text-muted-foreground/60">Peta Lokasi Dapur</p>
-                  <p className="text-sm text-muted-foreground/40">Integrasi peta akan tersedia</p>
-                </div>
-
-                {/* Pin markers */}
-                {MOCK_DAPUR.map((dapur) => (
-                  <PinMarker
-                    key={dapur.id}
-                    dapur={dapur}
-                    onClick={() => setSelectedDapur(dapur.id)}
-                  />
-                ))}
+              {/* Render Leaflet map inner component dynamically */}
+              <div className="relative h-[500px] lg:h-[600px] m-4 rounded-lg overflow-hidden border border-border">
+                <MapInner
+                  dapurs={MOCK_DAPUR}
+                  selectedDapurId={selectedDapur}
+                  setSelectedDapurId={setSelectedDapur}
+                  onViewCctv={(d) => setCctvDapur(d)}
+                />
               </div>
 
               {/* Legend */}
@@ -323,7 +287,7 @@ export default function MapsPage() {
                       <Card
                         key={dapur.id}
                         className={`cursor-pointer transition-all hover:shadow-md ${
-                          isSelected ? 'ring-2 ring-primary border-primary' : ''
+                          isSelected ? 'ring-2 ring-primary border-primary bg-muted/20' : ''
                         }`}
                         onClick={() =>
                           setSelectedDapur(isSelected ? null : dapur.id)
@@ -370,7 +334,7 @@ export default function MapsPage() {
                   <Card key={dapur.id} className="bg-muted/50">
                     <CardContent className="p-4 space-y-3">
                       <div className="flex items-center gap-2">
-                        <CheckCircleIcon className="size-4 text-emerald-500 shrink-0" />
+                        <VideoIcon className="size-5 text-primary shrink-0" />
                         <div className="min-w-0">
                           <p className="text-sm font-medium truncate">{dapur.nama}</p>
                           <div className="flex items-center gap-1.5 mt-0.5">

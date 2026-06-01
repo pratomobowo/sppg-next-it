@@ -6,6 +6,8 @@ import {
   TruckIcon,
   CheckCircleIcon,
   ClockIcon,
+  CopyIcon,
+  Share2Icon,
 } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -301,14 +303,44 @@ export default function PengirimanPage() {
                   <TableCell>{statusBadge(row.status)}</TableCell>
                   <TableCell className="text-right">
                     {row.status === 'Dalam Perjalanan' && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="border-emerald-300 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-700 dark:text-emerald-400 dark:hover:bg-emerald-950"
-                        onClick={() => openKonfirmasi(row)}
-                      >
-                        Konfirmasi Tiba
-                      </Button>
+                      <div className="flex items-center justify-end gap-1.5">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="size-8 text-muted-foreground hover:text-primary"
+                          onClick={() => {
+                            const url = `${window.location.origin}/pengiriman/konfirmasi/${row.id}`
+                            navigator.clipboard.writeText(url)
+                            toast.success('Link konfirmasi berhasil disalin', {
+                              description: url
+                            })
+                          }}
+                          title="Salin Link Konfirmasi"
+                        >
+                          <CopyIcon className="size-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="size-8 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
+                          onClick={() => {
+                            const url = `${window.location.origin}/pengiriman/konfirmasi/${row.id}`
+                            const text = `Halo, mohon konfirmasi penerimaan porsi Makanan Bergizi Gratis di ${row.sekolah} melalui link berikut: ${url}`
+                            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank')
+                          }}
+                          title="Share via WhatsApp"
+                        >
+                          <Share2Icon className="size-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="border-emerald-300 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-700 dark:text-emerald-400 dark:hover:bg-emerald-950 shrink-0"
+                          onClick={() => openKonfirmasi(row)}
+                        >
+                          Konfirmasi Tiba
+                        </Button>
+                      </div>
                     )}
                     {row.status === 'Tiba' && (
                       <span className="text-xs text-muted-foreground">

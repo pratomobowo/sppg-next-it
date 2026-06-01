@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import {
@@ -8,6 +8,7 @@ import {
   CameraIcon,
   PenLineIcon,
   CheckCircleIcon,
+  RotateCcwIcon,
 } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -34,10 +35,87 @@ export default function KonfirmasiSekolahPage() {
   const pengirimanId = params.id as string
 
   const [porsiDiterima, setPorsiDiterima] = useState<number>(0)
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const [isDrawing, setIsDrawing] = useState(false)
+  const [hasSigned, setHasSigned] = useState(false)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (canvas) {
+      canvas.width = canvas.parentElement?.clientWidth || 300
+      canvas.height = 150
+    }
+  }, [])
+
+  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    ctx.lineWidth = 3
+    ctx.lineCap = 'round'
+    ctx.strokeStyle = '#0F172A' // Slate 900
+
+    const pos = getPos(e)
+    ctx.beginPath()
+    ctx.moveTo(pos.x, pos.y)
+    setIsDrawing(true)
+  }
+
+  const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    if (!isDrawing) return
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    e.preventDefault() // Prevent scrolling on touch
+    const pos = getPos(e)
+    ctx.lineTo(pos.x, pos.y)
+    ctx.stroke()
+    setHasSigned(true)
+  }
+
+  const stopDrawing = () => {
+    setIsDrawing(false)
+  }
+
+  const getPos = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current
+    if (!canvas) return { x: 0, y: 0 }
+    const rect = canvas.getBoundingClientRect()
+    
+    if ('touches' in e) {
+      if (e.touches.length === 0) return { x: 0, y: 0 }
+      return {
+        x: e.touches[0].clientX - rect.left,
+        y: e.touches[0].clientY - rect.top
+      }
+    }
+    
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    }
+  }
+
+  const clearCanvas = () => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    setHasSigned(false)
+  }
 
   const handleKonfirmasi = () => {
     if (porsiDiterima <= 0) {
       toast.error('Isi jumlah porsi diterima')
+      return
+    }
+    if (!hasSigned) {
+      toast.error('Tanda tangan wajib diisi')
       return
     }
     toast.success('Penerimaan berhasil dikonfirmasi', {
@@ -116,17 +194,41 @@ export default function KonfirmasiSekolahPage() {
         </CardContent>
       </Card>
 
-      {/* ─── TTD Canvas Placeholder ─── */}
+      {/* ─── TTD Canvas Interaktif ─── */}
       <Card>
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-base">Tanda Tangan</CardTitle>
+          {hasSigned && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearCanvas}
+              className="h-7 px-2 text-xs text-muted-foreground hover:text-red-500"
+            >
+              <RotateCcwIcon className="mr-1 size-3" />
+              Reset
+            </Button>
+          )}
         </CardHeader>
         <CardContent>
-          <div className="flex h-[150px] items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/30 bg-muted/20">
-            <div className="flex flex-col items-center gap-1 text-muted-foreground">
-              <PenLineIcon className="size-6" />
-              <span className="text-sm">Tanda tangan di sini</span>
-            </div>
+          <div className="relative overflow-hidden rounded-lg border bg-muted/10">
+            <canvas
+              ref={canvasRef}
+              onMouseDown={startDrawing}
+              onMouseMove={draw}
+              onMouseUp={stopDrawing}
+              onMouseLeave={stopDrawing}
+              onTouchStart={startDrawing}
+              onTouchMove={draw}
+              onTouchEnd={stopDrawing}
+              className="cursor-crosshair bg-white block w-full touch-none"
+            />
+            {!hasSigned && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 text-muted-foreground pointer-events-none opacity-40">
+                <PenLineIcon className="size-5" />
+                <span className="text-xs">Coret tanda tangan di sini</span>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

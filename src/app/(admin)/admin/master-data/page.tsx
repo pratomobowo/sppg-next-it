@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import { toast } from 'sonner'
+import dynamic from 'next/dynamic'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -221,6 +222,8 @@ function SupplierStatusBadge({ status }: { status: Supplier['status'] }) {
   return <Badge variant={status === 'Aktif' ? 'default' : 'destructive'}>{status}</Badge>
 }
 
+const MiniMapPicker = dynamic(() => import('./MiniMapPicker'), { ssr: false })
+
 // ─── Tab: Data Dapur ──────────────────────────────────────────────────────────
 
 function DataDapurTab() {
@@ -286,9 +289,10 @@ function DataDapurTab() {
                 <Label htmlFor="d-alamat">Alamat *</Label>
                 <Input id="d-alamat" placeholder="Alamat lengkap" value={form.alamat} onChange={(e) => setForm({ ...form, alamat: e.target.value })} />
               </div>
-              <div>
-                <Label htmlFor="d-koordinat">Koordinat</Label>
+              <div className="space-y-1.5">
+                <Label htmlFor="d-koordinat">Koordinat (lat, lng)</Label>
                 <Input id="d-koordinat" placeholder="lat, lng" value={form.koordinat} onChange={(e) => setForm({ ...form, koordinat: e.target.value })} />
+                <MiniMapPicker value={form.koordinat} onChange={(val) => setForm({ ...form, koordinat: val })} />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>

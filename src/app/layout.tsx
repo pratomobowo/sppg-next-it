@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { themePresets } from "@/config/theme-presets";
 import { AuthProvider } from "@/lib/auth";
+import { PWARegister } from "@/components/pwa-register";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -90,6 +91,7 @@ export default function RootLayout({
             {children}
           </AuthProvider>
           <Toaster />
+          <PWARegister />
         </ThemeProvider>
       </body>
     </html>
