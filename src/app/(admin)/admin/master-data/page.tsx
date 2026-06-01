@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, Suspense } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import dynamic from 'next/dynamic'
 
@@ -378,7 +379,7 @@ function DataDapurTab() {
 function PenjadwalanMenuTab() {
   const [viewMode, setViewMode] = useState<'kalender' | 'list'>('kalender')
   const [currentMonth, setCurrentMonth] = useState(new Date(2026, 5, 1)) // June 2026
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date(2026, 5, 1))
   const [menuAssignments, setMenuAssignments] = useState<MenuAssignment[]>(
     MOCK_JADWAL.map((j) => ({
       date: new Date(j.tanggal + 'T00:00:00'),
@@ -536,33 +537,74 @@ function PenjadwalanMenuTab() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-7 gap-1">
+              <div className="grid grid-cols-7 gap-1.5">
                 {DAYS.map((d) => (
-                  <div key={d} className="text-center text-xs font-medium text-muted-foreground py-1">
+                  <div key={d} className="text-center text-xs font-semibold text-muted-foreground py-1">
                     {d}
                   </div>
                 ))}
                 {Array.from({ length: startDayOfWeek }).map((_, i) => (
-                  <div key={`empty-${i}`} />
+                  <div key={`empty-${i}`} className="min-h-[85px] rounded-lg border border-dashed border-border/10 bg-muted/5 opacity-30" />
                 ))}
                 {Array.from({ length: daysInMonth }, (_, i) => {
                   const day = i + 1
                   const date = new Date(year, month, day, 12)
-                  const isAssigned = assignedDates.has(date.toDateString())
+                  const assignment = menuAssignments.find((a) => a.date.toDateString() === date.toDateString())
                   const isSelected = selectedDate?.toDateString() === date.toDateString()
                   const isPast = date < today && date.toDateString() !== today.toDateString()
+                  
+                  // Calculate total calories for this date
+                  let totalKcal = 0
+                  if (assignment) {
+                    assignment.items.forEach((item) => {
+                      totalKcal += getNutrientsForMenuItem(item).kalori
+                    })
+                  }
+
                   return (
                     <button
                       key={day}
-                      className={`relative flex flex-col items-center justify-center rounded-md py-1.5 text-sm transition-colors
-                        ${isSelected ? 'bg-primary text-primary-foreground' : isPast ? 'text-muted-foreground/50' : 'hover:bg-muted'}
+                      className={`relative flex flex-col items-stretch justify-between rounded-lg border p-1.5 text-left transition-all min-h-[85px] hover:shadow-sm group
+                        ${isSelected ? 'border-primary ring-1 ring-primary bg-primary/5' : isPast ? 'bg-muted/10 border-border/40 opacity-70' : 'bg-card border-border hover:bg-muted/30'}
                       `}
                       onClick={() => setSelectedDate(date)}
                     >
-                      {day}
-                      {isAssigned && (
-                        <span className={`mt-0.5 size-1.5 rounded-full ${isSelected ? 'bg-primary-foreground' : 'bg-primary'}`} />
-                      )}
+                      {/* Top Row: Date Number & Calorie Badge */}
+                      <div className="flex items-center justify-between">
+                        <span className={`text-xs font-semibold flex items-center justify-center size-5 rounded-full
+                          ${isSelected ? 'bg-primary text-primary-foreground font-bold' : 'text-foreground group-hover:scale-110 transition-transform'}
+                        `}>
+                          {day}
+                        </span>
+                        {assignment && (
+                          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full border shadow-sm ${
+                            totalKcal >= 700 
+                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-900/30' 
+                              : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/20 dark:text-amber-400 dark:border-amber-900/30'
+                          }`}>
+                            {totalKcal} kcal
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Bottom Row: Item Previews */}
+                      <div className="mt-1 space-y-0.5">
+                        {assignment ? (
+                          assignment.items.slice(0, 2).map((item, idx) => (
+                            <div key={idx} className="text-[10px] text-muted-foreground truncate leading-tight flex items-center gap-1">
+                              <span className={`size-1 rounded-full shrink-0 ${isSelected ? 'bg-primary-foreground/75' : 'bg-primary/70'}`} />
+                              <span className="truncate">{item}</span>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="text-[9px] text-muted-foreground/20 italic">Kosong</div>
+                        )}
+                        {assignment && assignment.items.length > 2 && (
+                          <div className="text-[9px] text-muted-foreground/60 font-medium pl-2">
+                            +{assignment.items.length - 2} item lainnya
+                          </div>
+                        )}
+                      </div>
                     </button>
                   )
                 })}
@@ -1088,7 +1130,17 @@ function HargaAcuanTab() {
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
-export default function MasterDataPage() {
+function MasterDataContent() {
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const currentTab = searchParams.get('tab') || 'data-dapur'
+
+  const handleTabChange = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set('tab', value)
+    router.replace(`/admin/master-data?${params.toString()}`)
+  }
+
   return (
     <div className="space-y-6 p-6">
       <div>
@@ -1096,12 +1148,12 @@ export default function MasterDataPage() {
         <p className="text-muted-foreground">Pengelolaan data master SPPG Makan Bergizi Gratis</p>
       </div>
 
-      <Tabs defaultValue="data-dapur">
-        <TabsList className="w-full overflow-x-auto flex-nowrap">
+      <Tabs value={currentTab} onValueChange={handleTabChange}>
+        <TabsList className="w-full overflow-x-auto flex-nowrap justify-start">
           <TabsTrigger value="data-dapur">Data Dapur</TabsTrigger>
           <TabsTrigger value="penjadwalan-menu">Penjadwalan Menu</TabsTrigger>
           <TabsTrigger value="katalog-supplier">Katalog Supplier</TabsTrigger>
-          <TabsTrigger value="katalog-item">Katalog Item & Gizi</TabsTrigger>
+          <TabsTrigger value="katalog-item">Katalog Item &amp; Gizi</TabsTrigger>
           <TabsTrigger value="harga-acuan">Harga Acuan</TabsTrigger>
         </TabsList>
         <TabsContent value="data-dapur" className="mt-4">
@@ -1121,5 +1173,13 @@ export default function MasterDataPage() {
         </TabsContent>
       </Tabs>
     </div>
+  )
+}
+
+export default function MasterDataPage() {
+  return (
+    <Suspense fallback={<div className="p-6">Memuat master data...</div>}>
+      <MasterDataContent />
+    </Suspense>
   )
 }

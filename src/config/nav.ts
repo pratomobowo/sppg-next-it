@@ -30,7 +30,18 @@ const superAdminNav: NavConfig = {
       label: 'Utama',
       items: [
         { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboardIcon },
-        { title: 'Master Data', url: '/admin/master-data', icon: DatabaseIcon },
+        {
+          title: 'Master Data',
+          url: '/admin/master-data',
+          icon: DatabaseIcon,
+          items: [
+            { title: 'Data Dapur', url: '/admin/master-data?tab=data-dapur' },
+            { title: 'Penjadwalan Menu', url: '/admin/master-data?tab=penjadwalan-menu' },
+            { title: 'Katalog Supplier', url: '/admin/master-data?tab=katalog-supplier' },
+            { title: 'Katalog Item & Gizi', url: '/admin/master-data?tab=katalog-item' },
+            { title: 'Harga Acuan', url: '/admin/master-data?tab=harga-acuan' }
+          ]
+        },
         { title: 'Procurement', url: '/procurement/draft', icon: ShoppingCartIcon },
         { title: 'Accounting', url: '/accounting', icon: DollarSignIcon },
         { title: 'Inventory', url: '/inventory', icon: PackageIcon },
