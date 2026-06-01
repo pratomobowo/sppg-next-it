@@ -14,7 +14,7 @@ import {
 
 import { AppFooter, AppHeader, AppShell, AppSidebar } from '@/components/app-shell'
 import { useAuth } from '@/lib/auth'
-import { getNavForRole } from '@/config/sppg-nav'
+import { getNavConfig } from '@/config/nav'
 
 const ROLE_REDIRECTS: Record<string, string> = {
   'Super Administrator': '/admin/dashboard',
@@ -25,7 +25,7 @@ const ROLE_REDIRECTS: Record<string, string> = {
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const { currentUser } = useAuth()
   const router = useRouter()
-  const navConfig = getNavForRole(currentUser?.role ?? null)
+  const navConfig = getNavConfig(currentUser?.role ?? '')
 
   // ─── Role-based redirect ───
   useEffect(() => {

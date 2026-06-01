@@ -3,7 +3,7 @@
 import { type ReactNode, useEffect, useState } from 'react'
 import { AppFooter, AppHeader, AppShell, AppSidebar } from '@/components/app-shell'
 import { useAuth } from '@/lib/auth'
-import { getNavForRole } from '@/config/sppg-nav'
+import { getNavConfig } from '@/config/nav'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -30,7 +30,7 @@ export function SppgShell({ children, title }: { children: ReactNode; title?: st
     )
   }
 
-  const navConfig = getNavForRole(currentUser.role)
+  const navConfig = getNavConfig(currentUser.role)
 
   return (
     <AppShell

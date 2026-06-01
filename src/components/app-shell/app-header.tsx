@@ -87,7 +87,18 @@ export function AppHeader({ children, actions }: AppHeaderProps) {
                   {ROLES.map((r) => (
                     <DropdownMenuItem
                       key={r}
-                      onClick={() => switchRole(r)}
+                      onClick={() => {
+                        switchRole(r)
+                        const dest =
+                          r === 'Super Administrator'
+                            ? '/admin/dashboard'
+                            : r === 'BGN (Badan Gizi Nasional)'
+                            ? '/compliance-dashboard'
+                            : r === 'Investor'
+                            ? '/investor-dashboard'
+                            : '/dashboard'
+                        router.push(dest)
+                      }}
                       disabled={r === currentUser.role}
                     >
                       <span className={r === currentUser.role ? 'font-semibold' : ''}>
