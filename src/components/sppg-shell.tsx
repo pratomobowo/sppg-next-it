@@ -38,14 +38,12 @@ export function SppgShell({ children, title }: { children: ReactNode; title?: st
         <AppSidebar
           config={navConfig}
           header={
-            <div className="flex items-center justify-center px-2 py-2 border-b border-border/50 w-full">
-              <div className="flex size-9 items-center justify-center rounded-md bg-white border shadow-sm transition-transform hover:scale-105">
-                <img
-                  src="/images/logo-bgn.png"
-                  alt="Logo Badan Gizi Nasional"
-                  className="size-7.5 object-contain"
-                />
-              </div>
+            <div className="flex items-center justify-start px-4 py-3 border-b border-border/50 w-full overflow-hidden group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2">
+              <img
+                src="/images/logo-bgn.png"
+                alt="Logo Badan Gizi Nasional"
+                className="h-10 w-auto object-contain object-left max-w-full transition-transform hover:scale-102 group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:object-cover group-data-[collapsible=icon]:object-left"
+              />
             </div>
           }
         />
